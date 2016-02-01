@@ -18,8 +18,12 @@
     <!-- Canvas, ou tela -->
     <canvas id="canvas"></canvas>
 
-    <!-- adicionar biblioteca no JSBin -->
+    <!-- adicionar biblioteca jQuery no JSBin -->
+    <!-- Não é utilizado pro jogo da vida, somente conecta botões com
+    funções JavaScript -->
     <script src="external/jquery-2.2.0.min.js"></script>
+
+    <!-- fechar painel HTML -->
 
     <script>
      "use strict";
@@ -35,7 +39,7 @@
      // 4. definir progressão das gerações de células
      // 5. animar tabuleiro geração após geração
 
-     // Configurações globais
+     // PARTE 1. Configurações globais
      // são globais para simplicidade. Em grandes projetos seriam mantidas
      // num módulo ou objeto
      
@@ -48,6 +52,7 @@
      var fileirasTabuleiro = 23;
      var colunasTabuleiro = 36;
 
+     // PARTE 2. criar representações de células e do tabuleiro
      // animação
      var animando;
      var intervalo = 100;  // milisegundos, velocidade verdadeira varia por
@@ -123,6 +128,7 @@
      // inicializar tabuleiro
      var tabuleiro = new Tabuleiro(fileirasTabuleiro, colunasTabuleiro);
 
+     // PARTE 3. adicionar interatividade ao tabuleiro
      canvas.addEventListener('click', function(event) {
        // obter posição relativa à janela
        var boundingRect = this.getBoundingClientRect();
@@ -141,6 +147,7 @@
        }
      });
 
+     // PARTE 4. definir progressão das gerações de células
      // progressão de gerações
      Tabuleiro.prototype.contarVizinhasVivas = function(fileira, coluna) {
        var vizinhasVivas = 0;
@@ -220,6 +227,7 @@
        tabuleiro.desenhe();
      };
 
+     // PARTE 5. animar tabuleiro geração após geração
      // uso jQuery para simplificar a conexão entre os botões e as funções
      // JavaScript.
      $("#geracao").click(function () {
