@@ -9,7 +9,9 @@
     <br>
     
     <h1><tt>http://vivajs.com/vida.html</tt></h1>
-
+    <a href="http://jsbin.com/muwuji/edit?js,output">JSBin</a>
+    <br><br>
+    
     <!-- Definir botões de controle -->
     <button id="animacao">Comece a animação</button>
     <button id="pare">Pare</button>
@@ -52,13 +54,12 @@
      var tamanhoCelula = 12;  // pixeis, usado no desenho e espera de clique
      var corCelulaViva = "purple";  // roxa
      var corCelulaMorta = "white";  // branca
-     var corDaBorda = "lightBlue";  // azul-clara
+     var corBorda = "lightBlue";  // azul-clara
 
      // tamanho para a gun (arma, pistola) de gliders (espaçonaves asas-deltas)
      var fileirasTabuleiro = 23;
      var colunasTabuleiro = 36;
 
-     // PARTE 2. criar representações de células e do tabuleiro
      // animação
      var animando;
      var intervalo = 100;  // milisegundos, velocidade verdadeira varia por
@@ -73,8 +74,9 @@
 
      // bordas das células
      context.lineWidth = 1;  // espessura da linha
-     context.strokeStyle = corDaBorda;  // "estilo da linha"
+     context.strokeStyle = corBorda;  // "estilo da linha"
 
+     // PARTE 2. criar representações de células e do tabuleiro
      function Celula(fileira, coluna) {
        // lembrar a fileira e coluna para a hora de desenhar
        this.fileira = fileira;
@@ -104,7 +106,7 @@
        
        // desenhar borda
        context.strokeRect(cantoX, cantoY, tamanhoCelula, tamanhoCelula);
-     }
+     };
 
      function Tabuleiro(fileiras, colunas) {
        this.fileiras = fileiras;
@@ -129,7 +131,7 @@
            this.celulas[fileira][coluna].desenhe();
          }
        }
-     }
+     };
 
      // inicializar tabuleiro
      var tabuleiro = new Tabuleiro(fileirasTabuleiro, colunasTabuleiro);
@@ -157,16 +159,16 @@
      // progressão de gerações
      Tabuleiro.prototype.contarVizinhasVivas = function(fileira, coluna) {
        var vizinhasVivas = 0;
-       for (var r = fileira - 1; r <= fileira + 1; r++) {
+       for (var f = fileira - 1; f <= fileira + 1; f++) {
          for (var c = coluna - 1; c <= coluna + 1; c++) {
            
            // não contar a célula em si
-           if (!(r == fileira && c == coluna)) {
+           if (!(f == fileira && c == coluna)) {
              
              // validar coordenadas para evitar erros
              // células fora do tabuleiro são "mortas"
-             if (r >= 0 && r < this.fileiras && c >= 0 && c < this.colunas) {
-               if (this.celulas[r][c].viva) {
+             if (f >= 0 && f < this.fileiras && c >= 0 && c < this.colunas) {
+               if (this.celulas[f][c].viva) {
                  vizinhasVivas++;
                }
              }
@@ -174,31 +176,34 @@
          }
        }
        return vizinhasVivas;
-     }
+     };
 
      // determinar o que será o estado de uma célula na próxima geração
      Tabuleiro.prototype.celulaProximaGeracao = function(fileira, coluna) {
        var vizinhasVivas = this.contarVizinhasVivas(fileira, coluna);
        var celula = this.celulas[fileira][coluna];
+       var vivaNaProximaGeracao;
        
        if (this.celulas[fileira][coluna].viva) {
          // célula está viva atualmente, com 2 ou 3 vizinhas vivas,
          // continuará viva.
          if (vizinhasVivas == 2 || vizinhasVivas == 3) {
-           celula.vivaNaProximaGeracao = true;
+           vivaNaProximaGeracao = true;
          } else {
-           celula.vivaNaProximaGeracao = false;
+           vivaNaProximaGeracao = false;
          }
        } else {
          // a célula está morta atualmente. Com exatamente 3 vizinhas vivas,
          // nascerá na próxima geração.
          if (vizinhasVivas == 3) {
-           celula.vivaNaProximaGeracao = true;
+           vivaNaProximaGeracao = true;
          } else {
-           celula.vivaNaProximaGeracao = false;
+           vivaNaProximaGeracao = false;
          }
        }
-     }
+       celula.vivaNaProximaGeracao = vivaNaProximaGeracao;
+       return vivaNaProximaGeracao;
+     };
 
      // finalmente, usar essa regra em todas as células do tabuleiro
      Tabuleiro.prototype.tabuleiroProximaGeracao = function() {
@@ -222,15 +227,15 @@
        }
 
        this.desenhe();
-     }
+     };
 
      Tabuleiro.prototype.limpeTabuleiro = function() {
-       for (var r = 0; r < this.fileiras; r++) {
+       for (var f = 0; f < this.fileiras; f++) {
          for (var c = 0; c < this.colunas; c++) {
-           tabuleiro.celulas[r][c].viva = false;
+           this.celulas[f][c].viva = false;
          }
        }
-       tabuleiro.desenhe();
+       this.desenhe();
      };
 
      // PARTE 5. animar tabuleiro geração após geração
