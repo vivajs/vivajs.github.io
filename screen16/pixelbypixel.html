@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>A Canvas</title>
+  </head>
+  <body>
+	<canvas id="myCanvas"></canvas>
+	<script src="pixelator.js"></script>
+	<script>
+	  var context = document.getElementById('myCanvas').getContext('2d');
+	  var pix = pixelator(context);
+	  pix.drawPixel(20, 20, [30, 30, 200, 255]);
+	  pix.drawPixel(20, 21, [30, 30, 200, 255]);
+	  pix.drawPixel(20, 22, [30, 30, 200, 255]);
+	  pix.drawPixel(20, 23, [30, 30, 200, 255]);
+	  pix.drawPixel(20, 24, [200, 30, 200, 255]);
+	  pix.drawPixel(20, 25, [30, 30, 200, 255]);
+	  pix.drawPixel(21, 20, [30, 30, 200, 255]);
+	  pix.drawPixel(22, 21, [30, 30, 200, 255]);
+	  pix.drawPixel(23, 22, [30, 30, 200, 255]);
+	  pix.drawPixel(24, 23, [30, 30, 200, 255]);
+	  pix.drawPixel(25, 24, [200, 30, 200, 255]);
+	  pix.drawPixel(26, 25, [30, 30, 200, 255]);
+
+	  pix.drawLine(0, 0, 200, 100, 'black');
+	</script>
+  </body>
+</html>

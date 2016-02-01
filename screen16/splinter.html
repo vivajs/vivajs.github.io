@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>A Canvas</title>
+  </head>
+  <body>
+	<!-- ANGULAR to create new layers? -->
+	<canvas id="board" style="z-index: 1; position: absolute;" width="800" height="600"></canvas>
+	<canvas id="mike" style="z-index: 2; position: absolute;" width="800" height="600"></canvas>
+
+	
+	<script src="pixelator.js"></script>
+	<script src="turtle.js"></script>
+	<script>
+	  var board = document.getElementById("board");
+	  var boardContext = board.getContext('2d');
+	  var mikeElem = document.getElementById("mike")
+	  var mikeContext = mikeElem.getContext('2d');
+	  
+	  var mike = new Turtle(mikeContext, boardContext, 'mike', 'Michelangelo', 'red');
+
+	  mikeElem.addEventListener('click', function(event) {
+	  mike.rotate();
+	  mike.moveTo(event.pageX, event.pageY);
+	  }, false);
+
+	  mike.moveTo(50, 50);
+	  
+	</script>
+  </body>
+</html>

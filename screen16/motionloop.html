@@ -1,0 +1,225 @@
+  <!DOCTYPE HTML>
+<!-- http://www.html5canvastutorials.com/advanced/html5-canvas-animation-stage/ -->
+<html>
+  <head>
+  <style>
+  body {
+    margin: 0px;
+    padding: 0px;
+    background: blue;
+  }
+#myCanvas {
+  background: white;
+}
+</style>
+  </head>
+  <body>
+  <canvas id="myCanvas" width="600" height="360"></canvas><br>
+  <button onclick="keepLooping=false;">stop</button>
+  <button onclick="keepLooping=true; motionLoop();">play</button>
+  <script>
+
+function drawFromPoints(drawFn, drawFnOptions, startPts, endPts, locationFns, time) {
+  if (time.current <= time.end && time.current >= time.start) {
+    var currentPts = [];
+    for (var i = 0; i < startPts.length; i++) {
+      currentPts[i] = locationFns[i](startPts[i], endPts[i], time);
+    }
+    drawFn(currentPts, context, drawFnOptions);
+  }
+}
+
+function myLine(pts, context, options) {
+  var width = options.width || 2;
+  var color = options.color || "blue";
+  context.beginPath();
+  context.moveTo(pts[0].x, pts[0].y);
+  context.lineTo(pts[1].x, pts[1].y);
+  context.lineWidth = width;
+  context.strokeStyle = color;
+  context.stroke();
+}
+
+function cubicMotion(startPt, endPt, time) {
+  // parametric definition based on time
+  var curX, curY;
+
+  var ratio = (time.current - time.start) / (time.end - time.start);
+  curX = startPt.x + (Math.pow(ratio, 3) * (endPt.x - startPt.x));
+  curY = startPt.y + (Math.pow(ratio, 3) * (endPt.y - startPt.y));
+  return {x: curX, y: curY};
+}
+
+function linearMotion(startPt, endPt, time) {
+  var curX, curY;
+
+  var ratio = (time.current - time.start) / (time.end - time.start);
+  curX = startPt.x + (ratio * (endPt.x - startPt.x));
+  curY = startPt.y + (ratio * (endPt.y - startPt.y));
+  return {x: curX, y: curY};
+}
+
+function spirallyMotion(startPt, endPt, time) {
+  var curX, curY;
+  var ratio = (time.current - time.start) / (time.end - time.start);
+  curX = startPt.x + (ratio * (endPt.x - startPt.x)) + (Math.cos(ratio * 60.28) * 20);
+  curY = startPt.y + (ratio * (endPt.y - startPt.y)) + (Math.sin(ratio * 60.28) * 20);
+  return {x: curX, y: curY};
+}
+
+  window.requestAnimFrame = (function(callback) {
+    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+      function(callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+  })();
+
+function drawRectangle(myRectangle, context) {
+  context.beginPath();
+  context.rect(myRectangle.x, myRectangle.y, myRectangle.width, myRectangle.height);
+  context.fillStyle = '#8ED6FF';
+  context.fill();
+  context.lineWidth = myRectangle.borderWidth;
+  context.strokeStyle = 'black';
+  context.stroke();
+}
+
+function drawColoredPixel(dimen, fillColor, strokeColor, context) {
+  context.beginPath();
+  context.rect(dimen.x, dimen.y, dimen.width, dimen.height);
+  context.fillStyle = fillColor;
+  context.fill();
+  context.lineWidth = dimen.borderWidth;
+  context.strokeStyle = strokeColor;
+  context.stroke();
+}
+
+function randomInt(begin, end) {
+  return Math.floor(begin + Math.random() * (end - begin));
+}
+
+function randomHexColor(s) {
+  if (s.length === 6) {
+    return "#" + s;
+  } else {
+    return randomHexColor(s + randomInt(0,16).toString(16));
+  }
+}
+
+function animate(myRectangle, canvas, context, startTime, framesRun) {
+  // update
+  var time = (new Date()).getTime() - startTime;
+
+  var linearSpeed = 100;
+  // pixels / second
+  var newX = linearSpeed * time / 1000;
+
+  if(newX < canvas.width - myRectangle.width - myRectangle.borderWidth / 2) {
+	myRectangle.x = newX;
+  }
+
+  //// clear
+  // context.clearRect(0, 0, canvas.width, canvas.height);
+
+  // drawRectangle(myRectangle, context);
+  
+
+  drawColoredPixel({ x: randomInt(0, 500), y: randomInt(0, 200), width: 30, height: 30, borderWidth: 1 },
+                   randomHexColor(""), "#00FF00", context);
+  // request new frame
+
+  var fps = 20;
+  
+  if (framesRun < 100) {
+    setTimeout(function() {
+      requestAnimFrame(function() {
+	    animate(myRectangle, canvas, context, startTime, framesRun + 1);
+      });
+    }, 1000 / fps);
+  }
+}
+var canvas = document.getElementById('myCanvas');
+var context = canvas.getContext('2d');
+
+var myRectangle = {
+  x: 0,
+  y: 75,
+  width: 100,
+  height: 50,
+  borderWidth: 5
+};
+
+// drawRectangle(myRectangle, context);
+
+// wait one second before starting animation
+
+/*
+setTimeout(function() {
+  var startTime = (new Date()).getTime();
+  animate(myRectangle, canvas, context, startTime, 0);
+}, 100);
+*/
+
+function drawMyPoints(context, time) {
+  var fps = 60;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  
+  drawFromPoints(myLine, {}, [{x: 20, y: 200}, {x: 40, y: 50}], [{x: 300, y: 200}, {x: 260, y: 30}], [linearMotion, linearMotion], time);
+
+  drawFromPoints(myLine, {}, [{x: 220, y: 150}, {x: 20, y: 120}], [{x: 300, y: 200}, {x: 260, y: 30}], [linearMotion, linearMotion], time);
+  
+  drawFromPoints(myLine, {}, [{x: 100, y: 230}, {x: 120, y: 190}], [{x: 300, y: 200}, {x: 260, y: 30}], [cubicMotion, cubicMotion], time);
+  
+  // Beamrider style line
+  drawFromPoints(myLine, {color: "green"}, [{x: 280, y: 20}, {x: 300, y:20}],
+               [{x: 20, y: 365}, {x: 420, y: 365}],
+               [cubicMotion, cubicMotion], time);
+  
+  
+  drawFromPoints(myLine, {color: "black", width: 5},
+                 [{x: 20, y: 20}, {x: 30, y:30}],
+                 [{x: 320, y: 50}, {x: 320, y: 50}],
+                 [spirallyMotion, spirallyMotion], time);
+
+  // drag a line
+  drawFromPoints(myLine, {color: "red", width: 1},
+                 [{x: 10, y: 10}, {x: 10, y: 10}],
+                 [{x: 10, y: 10}, {x: 200, y: 10}],
+                 [linearMotion, linearMotion], time);
+  if (time.current < time.end) {
+//    setTimeout(function() {
+      requestAnimFrame(function() {
+        drawMyPoints(context, time);
+      });
+//    }, 1000 / fps);
+  }
+  time.current += 1;
+
+}
+
+var keepLooping = true;
+var currentFrame = 0;
+
+function motionLoop() {
+  context.clearRect(0, 0, canvas.width, canvas.height); 
+  drawFromPoints(myLine, {}, [{x: 20, y: 20}, {x: 30, y: 20}],
+                 [{x: 0, y: 300}, {x: 200, y: 300}],
+                 [cubicMotion, cubicMotion], {start: 0, current: currentFrame, end: 300});
+
+  drawFromPoints(myLine, {color: "red"}, [{x: 120, y: 120}, {x: 130, y: 120}],
+                 [{x: 200, y: 300}, {x: 300, y: 300}],
+                 [spirallyMotion, spirallyMotion], {start: 80, current: currentFrame, end: 220});
+  if (keepLooping) {
+    currentFrame++;
+    requestAnimFrame(function() {
+      motionLoop();
+    });
+  }
+}                   
+
+motionLoop();
+
+</script>
+  </body>
+  </html> 

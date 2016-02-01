@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>Driver seat LOGO</title>
+  </head>
+  <body>
+	<canvas width="300" height="250" id="myCanvas"></canvas>
+	<br>
+	x: <input type="text" size="3" id="inputX">
+	y: <input type="text" size="3" id="inputY">
+	<input type="button" value="dot" id="buttonDot">
+	<br>
+	deg: <input type="text" size="3" value="90" id="inputDeg">
+	<input type="button" value="rotate" id="buttonRotate">
+	<br>
+
+    <input type="button" value="slide" id="buttonSlide">
+	<br>
+
+  <script>
+  // DEVELOP on tinacg.github.io
+  (function() {
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext('2d');
+    var inputX = document.getElementById("inputX");
+    var inputY = document.getElementById("inputY");
+    var inputDeg = document.getElementById("inputDeg");
+
+    var buttonDot = document.getElementById("buttonDot");
+    var buttonRotate = document.getElementById("buttonRotate");
+    var buttonSlide = document.getElementById("buttonSlide");
+
+    var SLIDE_DISTANCE = 10;
+    var curAngle = 0;
+    var curSlide = 0;
+
+    var dotLineWidth = 1;
+    var dotSize = 3;
+    
+    var dots = [
+      {'x': 10, 'y': 10},
+      {'x': 30, 'y': 30},
+      {'x': 100, 'y': 100},
+    ];
+    
+    function addDot() {
+      dots.push({'x': Number(inputX.value) * Math.cos(curAngle) - (Number(inputY.value) - curSlide) * Math.sin(curAngle),
+                 'y': Number(inputX.value) * Math.sin(curAngle) + (Number(inputY.value) - curSlide)* Math.cos(curAngle)});
+    };
+
+    function addOriginDot() {
+      dots.push({'x': 0, 'y': 0});
+    }
+
+    function drawDots() {
+      dots.forEach(function(dot) {
+        context.beginPath();
+        context.rect(dot.x, dot.y, dotSize, dotSize);
+        context.lineWidth = dotLineWidth;
+        context.strokeStyle = "black";
+        context.stroke();
+      });
+    }
+
+    buttonDot.addEventListener("click", function(event) {
+      addOriginDot();
+      refresh(); 
+    });
+
+    function refresh() {
+      //context.translate(-canvas.width / 2, -canvas.height / 2);
+      context.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+      // context.clearRect(0, 0, canvas.width, canvas.height);
+
+      // context.translate(canvas.width / 2, canvas.height / 2);
+      drawDots();
+    }
+
+    function slideDown() {
+      context.rotate(-curAngle);
+      context.translate(0, SLIDE_DISTANCE);
+      curSlide += SLIDE_DISTANCE;
+      context.rotate(curAngle);
+      refresh();
+//      context.translate(0, -10);
+    }
+
+    function translateDots(distance) {
+      dots.forEach(function(dot) {
+        dot.y = Number(dot.y + distance);
+      });
+    }
+
+    function rotateDots(angle) {
+      dots.forEach(function(dot) {
+        var origX = Number(dot.x);
+        var origY = Number(dot.y);
+        var sinAngle = Math.sin(angle);
+        var cosAngle = Math.cos(angle);
+        dot.x = cosAngle * origX - sinAngle * origY;
+        dot.y = sinAngle * origX + cosAngle * origY;
+      });
+    }
+
+    var frameRotation = 0.03;
+    var frameDelay = 10;
+    
+    function animateRotation(angle) {
+      var wholeSteps = Math.floor(angle / frameRotation);
+      var stepRotation = angle / wholeSteps;
+      var remainder = angle % frameRotation;
+
+      for (var i = 0; i < wholeSteps; i++) {
+        setTimeout(function() { rotateDots(stepRotation);
+                                refresh(); }, frameDelay * i);
+      }
+    }
+    
+    buttonSlide.addEventListener("click", function(event) {
+      // slideDown();
+      translateDots(SLIDE_DISTANCE);
+      refresh();
+    });
+                                 
+    buttonRotate.addEventListener("click", function(event) {
+      /*
+      context.translate(0, -curSlide);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.rotate(inputDeg.value * Math.PI / 180);
+      curAngle += inputDeg.value * Math.PI / 180;
+      context.translate(0, curSlide);
+      */
+
+      // rotateDots(inputDeg.value * Math.PI / 180);
+      animateRotation(inputDeg.value * Math.PI / 180);
+      refresh();
+    });
+
+    context.translate(canvas.width / 2, canvas.height / 2);
+    refresh();
+    
+  })();
+
+	</script>
+  </body>
+</html>
