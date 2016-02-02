@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Viva JS! Gorilla</title>
+    <style>
+     h1 {
+         font-size: 32px;
+     }
+
+     h2 a {
+         font-size: 20px;
+         text-decoration: none;
+     }
+     
+    </style>
+  </head>
+  <body>
+    <a href="index.html">Voltar</a>
+    <br>
+    <canvas id="canvas"></canvas>
+    <script>
+     // store top-level variables
+     // var grapher = (function () {
+     
+     var canvas = document.getElementById("canvas");
+     var context = canvas.getContext("2d");
+
+     var canvasLargura = 600;
+     var canvasAltura = 400;
+
+     canvas.width = canvasLargura;
+     canvas.height = canvasAltura;
+
+     var fps = 60;
+     var intervalo = 1000 / fps;
+
+     var tamanhoMini = 3;
+
+     canvas.fillStyle = "blue";
+     
+     function miniQuadrado(x, y) {
+       context.fillRect(x, y, tamanhoMini, tamanhoMini);
+     }
+
+     function apagarMiniQuadrado(x, y) {
+       context.clearRect(x-1, y-1, tamanhoMini+2, tamanhoMini+2);
+     }
+
+     function circulo(centro, raio, cor) {
+       context.beginPath();
+       context.lineWidth = 2;
+       context.strokeStyle = cor;
+       context.arc(centro.x, centro.y, raio, 0, Math.PI * 2);
+       context.stroke();
+       context.closePath();
+     }
+
+     function apagarCirculo(centro, raio) {
+       var r = Math.max(0, raio);
+       context.beginPath();
+       context.lineWidth = 2;
+       context.strokeStyle = "white";
+       context.arc(centro.x, centro.y, raio, 0, Math.PI * 2);
+       context.stroke();
+       context.closePath();
+     }
+     
+     function animeCurva(comeco, fim, proximo) {
+       var xAtual = comeco;
+       var ultimoPonto = { x: 0, y: 0 };
+       
+       function lacoDeAnimacao() {
+         setTimeout(function () {
+           if (xAtual <= fim) {
+             miniQuadrado(xAtual, (xAtual/20) * (xAtual/20));
+             apagarMiniQuadrado(ultimoPonto.x, ultimoPonto.y);
+
+             ultimoPonto.x = xAtual;
+             ultimoPonto.y = (xAtual/20) * (xAtual/20);
+             xAtual += 3;
+             requestAnimationFrame(lacoDeAnimacao);
+           } else {
+             if (proximo) {
+               proximo();
+             }
+           }
+         }, intervalo);
+       }
+
+       lacoDeAnimacao();
+     }
+
+     function explosao(centro, raio, proximo) {
+       var r = 1;  // raio atual
+       var cor = "red";
+
+       function animacao() {
+         setTimeout(function () {
+           if (r <= raio) {
+             circulo(centro, r, cor);
+             apagarCirculo(centro, r-1);
+             r += 1;
+             requestAnimationFrame(animacao);
+           } else {
+             apagarCirculo(centro, r-1);
+             apagarCirculo(centro, r);
+             if (proximo) {
+               proximo();
+             }
+           }
+         }, intervalo);
+       }
+       animacao();
+     }
+     
+
+     var anime75a300 = function() {
+       animeCurva(75, 300);
+     };
+     
+     var anime100a600 = function() {
+       animeCurva(100, 600, anime75a300);
+     };
+
+     var explosao200 = function() {
+       explosao({ x: 200, y: 100 }, 15);
+     };
+     
+
+     animeCurva(0, 200, explosao200);
+     
+    </script>
+  </body>
+</html>
