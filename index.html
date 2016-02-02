@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <title>Viva JS!</title>
     <style>
+     body {
+         margin: 0;
+     }
+     
      a img {
          outline: none;
          border: none;
@@ -21,15 +25,25 @@
          font-size: 14px;
          font-style: italic;
          width: 100%;
-         padding: 5px;
+         padding-bottom: 10px;
          border-bottom: 1px solid blue;
      }
      
      .links {
          padding-top: 30px;
+         padding-bottom: 50px;
          font-size: 16px;
          text-align: center;
      }
+
+     .footer {
+         position: absolute;
+         bottom: 0;
+         padding-bottom: 20px;
+         width: 100%;
+         text-align: center;
+     }
+     
     </style>
   </head>
   <body>
@@ -37,9 +51,7 @@
       Viva JS!
     </div>
     <div class="subheader">
-      diversos projetos em JavaScript
-      <br>
-      apresentado por Heitor Chang
+      Projetos em JavaScript por Heitor Chang
     </div>
 
     <div class="links">
@@ -47,5 +59,10 @@
         <img src="img/glider.png"><br>Jogo da Vida de Conway
       </a>
     </div>
+
+    <div class="footer">
+      <a href="https://github.com/vivajs" target="_blank"><img src="img/github.png" alt="GitHub"></a>
+    </div>
+
   </body>
 </html>
