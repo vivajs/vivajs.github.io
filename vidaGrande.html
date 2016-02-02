@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Jogo da Vida de Conway com Canvas</title>
+    <style>
+     h1 {
+         font-size: 32px;
+     }
+
+     h2 a {
+         font-size: 20px;
+         text-decoration: none;
+     }
+     
+    </style>
+  </head>
+  <body>
+    <a href="index.html">Voltar</a>
+    <br>
+    
+    <h1><tt>http://vivajs.com/vida.html</tt></h1>
+
+    <h2>
+      <a href="http://jsbin.com/razuhe/edit?js,output">(Edite no JSBin)</a>
+      <a href=" YOUTUBE ">(Veja como programar no YouTube)</a>
+    </h2>
+    
+    <!-- Definir botões de controle -->
+    <button id="animacao">Inicie animação</button>
+    <button id="pare">Pare</button>
+    <button id="geracao">Avance uma geração</button>
+    <button id="limpe">Limpe o tabuleiro</button>
+
+    <hr>
+    
+    <!-- Canvas, ou tela -->
+    <canvas id="canvas"></canvas>
+
+    <br>
+    Atualizado 2 fev 2016
+    
+    <!-- adicionar biblioteca jQuery no JSBin -->
+    <!-- Não é utilizado pro jogo da vida, somente conecta botões com
+    funções JavaScript -->
+    <script src="external/jquery-2.2.0.min.js"></script>
+
+    <!-- fechar painel HTML -->
+
+    <script>
+     "use strict";
+
+     // SUMÁRIO
+
+     // Elaborado para ser fácil de entender. Não é o mais eficiente,
+     // nem o mais curto.
+
+     // 1. definir configurações globais
+     // 2. criar representações de células e do tabuleiro
+     // 3. adicionar interatividade ao tabuleiro
+     // 4. definir progressão das gerações de células
+     // 5. animar tabuleiro geração após geração
+
+     var jogoDaVida = (function () {
+       // PARTE 1. Configurações globais
+       // são globais para simplicidade. Em grandes projetos seriam mantidas
+       // num módulo ou objeto
+       
+       var tamanhoCelula = 9;  // pixeis, usado no desenho e espera de clique
+       var corCelulaViva = "purple";  // roxa
+       var corCelulaMorta = "white";  // branca
+       var corBorda = "lightBlue";  // azul-clara
+
+       // tamanho para gun (arma, pistola) de gliders (espaçonaves asas-deltas)
+       var fileirasTabuleiro = 50;
+       var colunasTabuleiro = 50;
+
+       // animação
+       var animando = false;
+
+       // frames per second, ou quadros por segundo
+       var fps = 30;
+       var intervalo = 1000 / fps;  // intervalo em milissegundos, entre duas gerações
+       // a velocidade verdadeira da animação pode variar
+       // entre computadores e navegadores.
+       // Valor define a velocidade máxima da animação.
+
+       var canvas = document.getElementById("canvas");
+       var context = canvas.getContext("2d");  // "contexto do desenho"
+
+       // pouquinho maior que as dimensões definidas acima
+       canvas.width = 500;  // largura
+       canvas.height = 500;  // altura
+
+       // bordas das células
+       context.lineWidth = 1;  // espessura da linha
+       context.strokeStyle = corBorda;  // "estilo da linha"
+
+       // PARTE 2. criar representações de células e do tabuleiro
+       function Celula(fileira, coluna) {
+         // lembrar a fileira e coluna para a hora de desenhar
+         this.fileira = fileira;
+         this.coluna = coluna;
+         
+         this.viva = false;  // começamos com células mortas, vazias
+
+         // variável temporária para determinar estado na próxima geração
+         this.vivaNaProximaGeracao = false;
+       }
+
+       Celula.prototype.desenhe = function() {
+         // local no canvas, canto superior à esquerda da célula
+         var cantoX = tamanhoCelula * this.coluna;  
+         var cantoY = tamanhoCelula * this.fileira;
+
+         var corCelula;
+         if (this.viva) {
+           corCelula = corCelulaViva;
+         } else {
+           corCelula = corCelulaMorta;
+         }
+         
+         // preencher interior da célula
+         context.fillStyle = corCelula;
+         context.fillRect(cantoX, cantoY, tamanhoCelula, tamanhoCelula);
+         
+         // desenhar borda
+         context.strokeRect(cantoX, cantoY, tamanhoCelula, tamanhoCelula);
+       };
+
+       function Tabuleiro(fileiras, colunas) {
+         this.fileiras = fileiras;
+         this.colunas = colunas;
+
+         // array, ou lista, externo de fileiras. Cada fileira, que é em si
+         // um array, terá as células individuais.
+         this.celulas = [];
+
+         for (var fileira = 0; fileira < this.fileiras; fileira++) {
+           this.celulas[fileira] = [];  // inicializar array para as células
+           for (var coluna = 0; coluna < this.colunas; coluna++) {
+             this.celulas[fileira][coluna] = new Celula(fileira, coluna);
+           }
+         }
+         this.desenhe();
+       }
+
+       Tabuleiro.prototype.desenhe = function() {
+         for (var fileira = 0; fileira < this.fileiras; fileira++) {
+           for (var coluna = 0; coluna < this.colunas; coluna++) {
+             this.celulas[fileira][coluna].desenhe();
+           }
+         }
+       };
+       
+       // inicializar tabuleiro
+       var tabuleiro = new Tabuleiro(fileirasTabuleiro, colunasTabuleiro);
+
+       // PARTE 3. adicionar interatividade ao tabuleiro
+       canvas.addEventListener('click', function(event) {
+         // obter posição relativa à janela
+         var boundingRect = this.getBoundingClientRect();
+
+         // calcular ponto dentro do canvas
+         var x = event.clientX - boundingRect.left;
+         var y = event.clientY - boundingRect.top;
+         
+         var fileira = Math.floor(y / tamanhoCelula);
+         var coluna = Math.floor(x / tamanhoCelula);
+
+         if (fileira < tabuleiro.fileiras && coluna < tabuleiro.colunas) {
+           // o clique inverte o estado da célula, vivo pra morto e vice versa
+           tabuleiro.celulas[fileira][coluna].viva = !tabuleiro.celulas[fileira][coluna].viva;
+           tabuleiro.celulas[fileira][coluna].desenhe();
+         }
+       });
+
+       // PARTE 4. definir progressão das gerações de células
+       // progressão de gerações
+       Tabuleiro.prototype.contarVizinhasVivas = function(fileira, coluna) {
+         var vizinhasVivas = 0;
+         for (var f = fileira - 1; f <= fileira + 1; f++) {
+           for (var c = coluna - 1; c <= coluna + 1; c++) {
+             
+             // não contar a célula em si
+             if (!(f == fileira && c == coluna)) {
+               
+               // validar coordenadas para evitar erros
+               // células fora do tabuleiro são "mortas"
+               if (f >= 0 && f < this.fileiras && c >= 0 && c < this.colunas) {
+                 if (this.celulas[f][c].viva) {
+                   vizinhasVivas++;
+                 }
+               }
+             }
+           }
+         }
+         return vizinhasVivas;
+       };
+
+       // determinar o que será o estado de uma célula na próxima geração
+       Tabuleiro.prototype.celulaProximaGeracao = function(fileira, coluna) {
+         var vizinhasVivas = this.contarVizinhasVivas(fileira, coluna);
+         var celula = this.celulas[fileira][coluna];
+         var vivaNaProximaGeracao;
+         
+         if (this.celulas[fileira][coluna].viva) {
+           // célula está viva atualmente, com 2 ou 3 vizinhas vivas,
+           // continuará viva.
+           if (vizinhasVivas == 2 || vizinhasVivas == 3) {
+             vivaNaProximaGeracao = true;
+           } else {
+             vivaNaProximaGeracao = false;
+           }
+         } else {
+           // a célula está morta atualmente. Com exatamente 3 vizinhas vivas,
+           // nascerá na próxima geração.
+           if (vizinhasVivas == 3) {
+             vivaNaProximaGeracao = true;
+           } else {
+             vivaNaProximaGeracao = false;
+           }
+         }
+         celula.vivaNaProximaGeracao = vivaNaProximaGeracao;
+         return vivaNaProximaGeracao;
+       };
+
+       // finalmente, usar essa regra em todas as células do tabuleiro
+       Tabuleiro.prototype.tabuleiroProximaGeracao = function() {
+         var f;
+         var c;
+         
+         // calcular o estado de cada célula uma por uma
+         for (f = 0; f < this.fileiras; f++) {
+           for (c = 0; c < this.colunas; c++) {
+             this.celulaProximaGeracao(f, c);
+           }
+         }
+
+         // e em seguida, atualizar a propriedade viva. Este processo tem que
+         // ser feita em duas etapas porque as células crescem ou morrem
+         // simultaneamente.
+         for (f = 0; f < this.fileiras; f++) {
+           for (c = 0; c < this.colunas; c++) {
+             this.celulas[f][c].viva = this.celulas[f][c].vivaNaProximaGeracao;
+           }
+         }
+
+         this.desenhe();
+       };
+
+       Tabuleiro.prototype.limpeTabuleiro = function() {
+         for (var f = 0; f < this.fileiras; f++) {
+           for (var c = 0; c < this.colunas; c++) {
+             this.celulas[f][c].viva = false;
+           }
+         }
+         this.desenhe();
+       };
+
+
+       // PARTE 5. animar tabuleiro geração após geração
+       // uso jQuery para simplificar a conexão entre os botões e as funções
+       // JavaScript.
+       function lacoDeAnimacao() {
+         // usar intervalo para fazer a velocidade da animacao
+         // o desejado numero de fps (quadros por segundo)
+         setTimeout(function() {
+           if (animando) {
+             requestAnimationFrame(lacoDeAnimacao);
+             tabuleiro.tabuleiroProximaGeracao();
+           }
+         }, intervalo);
+       }
+
+       $("#geracao").click(function () {
+         tabuleiro.tabuleiroProximaGeracao();
+       });
+       
+       $("#animacao").click(function () {
+         animando = true;
+         lacoDeAnimacao();
+         $(this).attr("disabled", true);
+         $("#geracao").attr("disabled", true);
+       });
+       
+       $("#pare").click(function () {
+         animando = false;
+         $("#animacao").removeAttr("disabled");
+         $("#geracao").removeAttr("disabled");
+       });
+         
+       $("#limpe").click(function () {
+         $("#pare").click();  // simule clique em "Pare"
+         tabuleiro.limpeTabuleiro();
+       });
+              
+       // simule um clique no botão pra começar a animação
+       $("#animacao").click();
+       
+       // definir células vivas pelo script
+       Tabuleiro.prototype.darVida = function(fileira, coluna) {
+         this.celulas[fileira][coluna].viva = true;
+       };
+
+       Tabuleiro.prototype.criarCriatura = function(coordinates) {
+         coordinates.forEach(function (point) {
+           // desempacota a fileira e coluna de cada par e chama darVida
+           this.darVida.apply(this, point);
+         }, this);
+       };
+
+       // espaçonaves
+       var glider1 = [[15, 1],
+                      [15, 2],
+                      [15, 3],
+                      [16, 3],
+                      [17, 2]];
+       // tabuleiro.criarCriatura(glider1);
+
+       var gliderGun = [[4, 0],
+                        [4, 1],
+                        [5, 0],
+                        [5, 1],
+                        
+                        [2, 10],
+                        [3, 9],
+                        [4, 8],
+                        [4, 9],
+                        [5, 6],
+                        [5, 7],
+                        [6, 8],
+                        [6, 9],
+                        [7, 9],
+                        [8, 10],
+
+                        [5, 11],
+                        [2, 12],
+                        [3, 12],
+                        [7, 12],
+                        [8, 12],
+                        
+                        [3, 15],
+                        [3, 16],
+                        [4, 15],
+                        [4, 17],
+                        [5, 15],
+                        [6, 15],
+                        [6, 16],
+                        [6, 17],
+                        [7, 16],
+                        [7, 17],
+
+                        
+                        [5, 19],
+                        [6, 19],
+                        [6, 20],
+                        
+                        [6, 23],
+                        [6, 24],
+                        [5, 23],
+                        [5, 25],
+                        [4, 26],
+                        [3, 23],
+                        [3, 26],
+                        [2, 26],
+                        [1, 23],
+                        [1, 25],
+                        [0, 23],
+                        [0, 24],
+                        
+                        [2, 34],
+                        [2, 35],
+                        [3, 34],
+                        [3, 35]];
+       tabuleiro.criarCriatura(gliderGun);
+       
+       tabuleiro.desenhe();
+     })();
+    </script>
+  </body>
+</html>
