@@ -77,6 +77,7 @@
 
        // animação
        var animando = false;
+       var laco;
 
        // frames per second, ou quadros por segundo
        var fps = 30;
@@ -267,7 +268,7 @@
          // o desejado numero de fps (quadros por segundo)
          setTimeout(function() {
            if (animando) {
-             requestAnimationFrame(lacoDeAnimacao);
+             laco = requestAnimationFrame(lacoDeAnimacao);
              tabuleiro.tabuleiroProximaGeracao();
            }
          }, intervalo);
@@ -286,6 +287,7 @@
        
        $("#pare").click(function () {
          animando = false;
+         cancelAnimationFrame(laco);
          $("#animacao").removeAttr("disabled");
          $("#geracao").removeAttr("disabled");
        });

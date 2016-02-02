@@ -77,7 +77,8 @@
 
        // animação
        var animando = false;
-
+       var lacoAtivo;
+       
        // frames per second, ou quadros por segundo
        var fps = 20;
        var intervalo = 1000 / fps;  // intervalo em milissegundos, entre duas gerações
@@ -267,7 +268,7 @@
          // o desejado numero de fps (quadros por segundo)
          setTimeout(function() {
            if (animando) {
-             requestAnimationFrame(lacoDeAnimacao);
+             lacoAtivo = requestAnimationFrame(lacoDeAnimacao);
              tabuleiro.tabuleiroProximaGeracao();
            }
          }, intervalo);
@@ -286,6 +287,7 @@
        
        $("#pare").click(function () {
          animando = false;
+         cancelAnimationFrame(lacoAtivo);
          $("#animacao").removeAttr("disabled");
          $("#geracao").removeAttr("disabled");
        });
