@@ -1,3 +1,5 @@
 # Viva JS!
 
-Central de projetos completos escritos em JavaScript
+Diversos projetos em JavaScript
+
+* Jogo da Vida de Conway
