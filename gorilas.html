@@ -37,16 +37,24 @@
      var fps = 60;
      var intervalo = 1000 / fps;
 
-     var tamanhoMini = 3;
+     var tamanhoMini = 10;
 
-     canvas.fillStyle = "blue";
+     var corDeFundo = "midnightBlue";
+
+     var gravidade = 0.02;
      
-     function miniQuadrado(x, y) {
-       context.fillRect(x, y, tamanhoMini, tamanhoMini);
+     // pintar ceu
+     context.fillStyle = corDeFundo;
+     context.fillRect(0, 0, canvasLargura, canvasAltura);
+
+     function quad(ponto) {
+       context.fillStyle = "white";
+       context.fillRect(ponto.x, ponto.y, tamanhoMini, tamanhoMini);
      }
 
-     function apagarMiniQuadrado(x, y) {
-       context.clearRect(x-1, y-1, tamanhoMini+2, tamanhoMini+2);
+     function apagarQuad(ponto) {
+       context.fillStyle = corDeFundo;       
+       context.fillRect(ponto.x-1, ponto.y-1, tamanhoMini+2, tamanhoMini+2);
      }
 
      function circulo(centro, raio, cor) {
@@ -72,16 +80,16 @@
        var xAtual = comeco;
        var ultimoPonto = { x: 0, y: 0 };
        
-       function lacoDeAnimacao() {
+       function anime() {
          setTimeout(function () {
            if (xAtual <= fim) {
-             miniQuadrado(xAtual, (xAtual/20) * (xAtual/20));
-             apagarMiniQuadrado(ultimoPonto.x, ultimoPonto.y);
+             apagarQuad(ultimoPonto);
+             quad({ x: xAtual, y: (xAtual/20) * (xAtual/20)});
 
              ultimoPonto.x = xAtual;
              ultimoPonto.y = (xAtual/20) * (xAtual/20);
              xAtual += 3;
-             requestAnimationFrame(lacoDeAnimacao);
+             requestAnimationFrame(anime);
            } else {
              if (proximo) {
                proximo();
@@ -90,7 +98,7 @@
          }, intervalo);
        }
 
-       lacoDeAnimacao();
+       anime();
      }
 
      function explosao(centro, raio, proximo) {
@@ -115,6 +123,33 @@
        }
        animacao();
      }
+
+     function animeSequencia(sequencia, proximo) {
+       // coordenadas cartesianas
+       // animeSequencia([
+       //   { x: 0, y: 0.5 },
+       //   { x: 0.1, y: 0.5 },
+       //   { x: 0.2, y: 0.5 }, ...]);
+       var ultimoPonto = sequencia[0];
+       function anime() {
+         setTimeout(function () {
+           if (sequencia.length > 0) {
+             apagarQuad(cartesianoACanvas(ultimoPonto));
+             quad(cartesianoACanvas(sequencia[0]));
+
+             ultimoPonto = sequencia[0];
+             sequencia = sequencia.slice(1);  // avançar um ponto
+             requestAnimationFrame(anime);
+           } else {
+             if (proximo) {
+               proximo();
+             }
+           }
+         }, intervalo);
+       }
+
+       anime();
+     }
      
 
      var anime75a300 = function() {
@@ -126,17 +161,96 @@
      };
 
      var explosao200 = function() {
-       explosao({ x: 200, y: 100 }, 15);
+       explosao({ x: 205, y: 105 }, 15);
      };
      
 
      animeCurva(0, 200, explosao200);
+     
+     function canvasACartesiano(pontoCanvas) {
+       // converter coordenadas do canvas a cartesiana, onde
+       // o canto inferior esquerdo será (0, 0).
+       // A largura vai de 0 a 1, e a altura é proporcional,
+       // de forma que (0, 0) a (1, 1) forme um quadrado.
+       
+       return {
+         x: pontoCanvas.x / canvasLargura,
+         y: (canvasAltura - pontoCanvas.y) / canvasLargura
+       };
+     }
 
-     // function normalizar(x, y) {
-     //   converter coordenadas cartesianas em coordenadas de canvas
-     //   (0, 0) -> (0, canvas.height)
-     //   (1, 1) -> (canvas.width, 0) caso canvas e' quadrado
-     // }
+     function cartesianoACanvas(pontoCartesiano) {
+       // converter coordenadas cartesianas a coordenadas de canvas
+       // O canto inferior esquerdo é (0, 0), e a largura vai de
+       // 0 a 1.
+
+       var alturaCartesiana = canvasAltura / canvasLargura;
+       
+       return {
+         x: pontoCartesiano.x * canvasLargura,
+         y: (alturaCartesiana - pontoCartesiano.y) * canvasLargura
+       };       
+     }
+
+     animeSequencia([
+       { x: 0.1, y: 0.1 },
+       { x: 0.2, y: 0.2 },
+       { x: 0.3, y: 0.3 },
+       { x: 0.4, y: 0.4 },
+       { x: 0.5, y: 0.5 },
+     ]);
+
+     function parabola(pontoInicial, graus, potencia) {
+       // graus entre 0 e 90
+       // potencia positiva para arremesso de esquerda pra direita,
+       // negativa na outra direção
+
+       // potencia entre ~0.07 a 0.2
+
+       var radianos = Math.PI * graus / 180;
+       var velocidadeX = potencia * Math.cos(radianos);
+       var velocidadeY = Math.abs(potencia) * Math.sin(radianos);
+
+       var pontos = [pontoInicial];
+       var pontoAtual = { x: pontoInicial.x, y: pontoInicial.y };
+       while (pontoAtual.y >= 0) {
+         pontoAtual.x += velocidadeX;
+         pontoAtual.y += velocidadeY;
+         velocidadeY -= gravidade;
+         pontos.push({ x: pontoAtual.x, y: pontoAtual.y });
+       }
+
+       // trocar ultimo ponto por local onde y = ponto de impacto
+       return pontos;
+     }
+
+     // local de colisão poderá ser entre dois pontos da sequencia
+
+
+     function interpolar(sequencia) {
+       // inserir uma subsequencia de pontos linearmente entre pontos
+       // da sequencia original
+
+       var pontosInterpolados = 12;
+       
+       if (sequencia.length == 1) {
+         return sequencia;
+       } else {
+         var segmento = [];
+         for (var i = 1; i < pontosInterpolados; i++) {
+           var pontoInicial = sequencia[0];
+           var pontoFinal = sequencia[1];
+           var dy = pontoFinal.y - pontoInicial.y;
+           var dx = pontoFinal.x - pontoInicial.x;
+           var pontoInterpolado = { x: pontoInicial.x + (i / pontosInterpolados) * dx,
+                                    y: pontoInicial.y + (i / pontosInterpolados) * dy };
+           segmento.push(pontoInterpolado);
+         }
+         var listaInicial = [sequencia[0]];
+         return listaInicial.concat(segmento.concat(interpolar(sequencia.slice(1))));
+       }
+     }
+     
     </script>
   </body>
 </html>
