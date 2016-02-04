@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Viva JS! Gorilla</title>
+    <title>Viva JS! Gorilas</title>
     <style>
      h1 {
          font-family: sans-serif;
@@ -35,9 +35,10 @@
      canvas.height = canvasAltura;
 
      var fps = 60;
+
      var intervalo = 1000 / fps;
 
-     var tamanhoMini = 10;
+     var tamanhoMini = 3;
 
      var corDeFundo = "midnightBlue";
 
@@ -70,7 +71,7 @@
        var r = Math.max(0, raio);
        context.beginPath();
        context.lineWidth = 2;
-       context.strokeStyle = "white";
+       context.strokeStyle = corDeFundo;
        context.arc(centro.x, centro.y, raio, 0, Math.PI * 2);
        context.stroke();
        context.closePath();
@@ -113,8 +114,10 @@
              r += 1;
              requestAnimationFrame(animacao);
            } else {
-             apagarCirculo(centro, r-1);
-             apagarCirculo(centro, r);
+             setTimeout(function() {
+               apagarCirculo(centro, r-1);
+               apagarCirculo(centro, r);
+             }, 100);
              if (proximo) {
                proximo();
              }
@@ -130,42 +133,65 @@
        //   { x: 0, y: 0.5 },
        //   { x: 0.1, y: 0.5 },
        //   { x: 0.2, y: 0.5 }, ...]);
-       var ultimoPonto = sequencia[0];
+       var ultimoPontoCanvas = cartesianoACanvas(sequencia[0]);
+       
+       function chamarProximo(ultimoPontoCanvas) {
+         setTimeout(function() {
+           apagarQuad(ultimoPontoCanvas);
+           if (proximo) {
+             proximo();
+           }
+         }, intervalo);
+       }
+       
        function anime() {
          setTimeout(function () {
-           if (sequencia.length > 0) {
-             apagarQuad(cartesianoACanvas(ultimoPonto));
-             quad(cartesianoACanvas(sequencia[0]));
+           var pontoCanvas = cartesianoACanvas(sequencia[0]);
 
-             ultimoPonto = sequencia[0];
-             sequencia = sequencia.slice(1);  // avançar um ponto
-             requestAnimationFrame(anime);
-           } else {
-             if (proximo) {
-               proximo();
+           if (pontoCanvas.x >= 0 && pontoCanvas.x <= canvasLargura && pontoCanvas.y <= canvasAltura) {
+             
+             if (pontoCanvas.y < 0) {
+               pontoCanvas.y = 1;
              }
+             
+             apagarQuad(ultimoPontoCanvas);
+             quad(pontoCanvas);
+             
+             ultimoPontoCanvas = pontoCanvas;
+             if (sequencia.length > 1) {
+               sequencia = sequencia.slice(1);  // avançar um ponto
+               requestAnimationFrame(anime);
+             } else {
+               chamarProximo(ultimoPontoCanvas);
+             }
+             // coordenada x do ponto fora do canvas
+           } else {
+             chamarProximo(ultimoPontoCanvas);
            }
          }, intervalo);
        }
 
        anime();
      }
-     
 
-     var anime75a300 = function() {
-       animeCurva(75, 300);
-     };
-     
-     var anime100a600 = function() {
-       animeCurva(100, 600, anime75a300);
-     };
+     function animeCanvas(sequencia, proximo) {
+       animeSequencia(sequencia.map(function(ponto) { return canvasACartesiano(ponto); }), proximo);
+     }
 
-     var explosao200 = function() {
-       explosao({ x: 205, y: 105 }, 15);
-     };
-     
+     function desenhePredio(porcentagemX, porcentagemAltura) {
+       var porcentagemLargura = 0.1;
 
-     animeCurva(0, 200, explosao200);
+       var largura = 0.1 * canvasLargura;
+       var altura = porcentagemAltura * canvasAltura;
+       var cantoX = porcentagemX * canvasLargura;
+       var cantoY = canvasAltura - (porcentagemAltura * canvasAltura);
+       
+       context.fillStyle = "brown";
+       context.fillRect(cantoX, cantoY, largura, altura);
+     }
+
+     desenhePredio(0.3, 0.2);
+
      
      function canvasACartesiano(pontoCanvas) {
        // converter coordenadas do canvas a cartesiana, onde
@@ -191,14 +217,6 @@
          y: (alturaCartesiana - pontoCartesiano.y) * canvasLargura
        };       
      }
-
-     animeSequencia([
-       { x: 0.1, y: 0.1 },
-       { x: 0.2, y: 0.2 },
-       { x: 0.3, y: 0.3 },
-       { x: 0.4, y: 0.4 },
-       { x: 0.5, y: 0.5 },
-     ]);
 
      function parabola(pontoInicial, graus, potencia) {
        // graus entre 0 e 90
@@ -227,7 +245,7 @@
      // local de colisão poderá ser entre dois pontos da sequencia
 
 
-     function interpolar(sequencia) {
+     function interpole(sequencia) {
        // inserir uma subsequencia de pontos linearmente entre pontos
        // da sequencia original
 
@@ -243,13 +261,119 @@
            var dy = pontoFinal.y - pontoInicial.y;
            var dx = pontoFinal.x - pontoInicial.x;
            var pontoInterpolado = { x: pontoInicial.x + (i / pontosInterpolados) * dx,
-                                    y: pontoInicial.y + (i / pontosInterpolados) * dy };
+                                    y: pontoInicial.y + (i / pontosInterpolados) * dy };           
            segmento.push(pontoInterpolado);
          }
+
          var listaInicial = [sequencia[0]];
-         return listaInicial.concat(segmento.concat(interpolar(sequencia.slice(1))));
+         return listaInicial.concat(segmento.concat(interpole(sequencia.slice(1))));
        }
      }
+
+     function preenchaX(sequencia) {
+       // inserir valores de todos x para testar colisoes
+       if (sequencia.length == 1) {
+         return sequencia;
+       } else {
+         var segmento = linhaComTodosX(sequencia[0], sequencia[1]);
+         var listaInicial = [sequencia[0]];
+         return listaInicial.concat(segmento.concat(preenchaX(sequencia.slice(1))));
+       }
+     }
+
+     function linhaComTodosX(ponto1, ponto2) {
+       var dy = ponto2.y - ponto1.y;
+       var dx = ponto2.x - ponto1.x;
+       var inclinacao = dy / dx;
+       
+       var pontos = [];
+       if (dx > 0) {
+         for (var x = ponto1.x + 1; x < ponto2.x; x++) {
+           pontos.push({ x: x, y: ponto1.y + (inclinacao * (x - ponto1.x)) });
+         }
+       } else {
+         for (var x = ponto1.x - 1; x > ponto2.x; x--) {
+           pontos.push({ x: x, y: ponto1.y + (inclinacao * (x - ponto1.x)) });
+         }
+       }
+       return pontos;
+     }
+     
+
+
+     // http://stackoverflow.com/questions/4672279/bresenham-algorithm-in-javascript
+     function bresenham(ponto0, ponto1) {
+       var x0 = ponto0.x;
+       var y0 = ponto0.y;
+       var x1 = ponto1.x;
+       var y1 = ponto1.y;
+       
+       var colisao = false;
+       
+       var dx = Math.abs(x1-x0);
+       var dy = Math.abs(y1-y0);
+       var sx = (x0 < x1) ? 1 : -1;
+       var sy = (y0 < y1) ? 1 : -1;
+       var err = dx-dy;
+       
+       // while(true){
+       for (var i = 0 ; i < 10; i++) {
+         console.log("x: " + x0 +  " ," + y0);  // Do what you need to for this
+         if (!eCorDeFundo(context.getImageData(x0, y0, 1, 1).data)) {
+           console.log("colisao bresenham " + x0 + "," + y0);
+           return { x: x0, y: y0 };
+         }
+         
+         if (Math.abs(x0-x1) < 0.0001 && Math.abs(y0-y1) < 0.0001) return false;
+         var e2 = 2*err;
+         if (e2 >-dy){ err -= dy; x0  += sx; }
+         if (e2 < dx){ err += dx; y0  += sy; }
+       }
+       return false;
+     }
+     
+     
+     var corDeFundoRGB = [25, 25, 112];
+
+     function detecteColisao(sequencia) {
+       var trajetoria = [];
+       for (var i = 0; i < sequencia.length-1; i++) {
+         // verificar cor de pixel
+         // var pontoCanvas = cartesianoACanvas(sequencia[i]);
+         var pontoCanvas = sequencia[i];
+         var corPixel = context.getImageData(pontoCanvas.x, pontoCanvas.y, 1, 1).data;
+         
+         trajetoria.push(sequencia[i]);
+         if (!eCorDeFundo(corPixel)) {
+           console.log("colisao a  " + pontoCanvas.x + "," + pontoCanvas.y);
+           
+           return trajetoria;
+         }
+       }
+       return trajetoria;
+     }
+
+     function eCorDeFundo(corPixel) {
+       // é midnightBlue ou preto
+       return ((corPixel[0] == corDeFundoRGB[0] &&
+         corPixel[1] == corDeFundoRGB[1] &&
+         corPixel[2] == corDeFundoRGB[2]) ||
+               (corPixel[0] == 0 &&
+                 corPixel[1] == 0 &&
+                 corPixel[2] == 0));
+     }
+     
+
+     var p = parabola({ x: 0.1, y: 0.2 }, 80, 0.12);
+     // var p = parabola({ x: 0.1, y: 0.2 }, 30, 0.12);
+     
+     var pc = p.map(function(pt) { return cartesianoACanvas(pt); });
+     var prc = preenchaX(pc);
+     var pcd = detecteColisao(prc);
+
+     animeCanvas(pcd, function() { explosao(pcd[pcd.length-1], 20) });
+
+     // animar versao interpolada
      
     </script>
   </body>
