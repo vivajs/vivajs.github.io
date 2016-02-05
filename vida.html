@@ -4,50 +4,79 @@
     <meta charset="utf-8">
     <title>Jogo da Vida de Conway com Canvas</title>
     <style>
-     h1 {
+     body {
          font-family: sans-serif;
+         text-align: center;
+         margin: 0;
+         padding: 0;
+     }
+     
+     h1 {
          font-size: 32px;
      }
 
      h2 {
-         font-family: sans-serif;
          font-size: 18px;
      }
      
      h2 a {
-         font-family: sans-serif;
          font-size: 20px;
          text-decoration: none;
      }
+
+     .back {
+         background-color: green;
+         color: white;
+         font-size: 16px;
+         text-decoration: none;
+         padding-top: 10px;
+         padding-bottom: 5px;
+         border-bottom: 12px solid yellow;
+     }
      
+     .back a {
+         color: white;
+         font-style: italic;
+         font-weight: bold;
+         text-decoration: none;
+     }
+
+     img {
+         vertical-align: middle;
+     }
+          
     </style>
   </head>
   <body>
-    <a href="index.html">Voltar</a>
-    <br>
+    <div class="back"><a href="index.html">&lt;&lt; Voltar à página principal</a></div>
 
     <h2>Jogo da Vida de Conway</h2>
     
     <h1>http://vivajs.com/vida.html</h1>
 
     <h2>
-      <a href="http://jsbin.com/wirebizoca/edit?html,js,output">(Edite no JSBin)</a>
-      <a href="https://www.youtube.com/watch?v=OsDiqR5Qesk">(Veja como foi feito no YouTube)</a>
+      <a href="https://www.youtube.com/watch?v=OsDiqR5Qesk"><img src="img/youtube.png" alt="YouTube"> Veja como foi feito no YouTube</a>
     </h2>
     
+    <h2>
+      <a href="http://jsbin.com/wirebizoca/edit?html,js,output">Edite no JSBin</a>
+    </h2>
+
+    <hr>
+
     <!-- Definir botões de controle -->
     <button id="animacao">Inicie animação</button>
     <button id="pare">Pare</button>
     <button id="geracao">Avance uma geração</button>
     <button id="limpe">Limpe o tabuleiro</button>
 
-    <hr>
+    <br><br>
     
     <!-- Canvas, ou tela -->
     <canvas id="canvas"></canvas>
 
     <br>
-    Atualizado 2 fev 2016
+    Atualizado 5 fev 2016
     
     <!-- adicionar biblioteca jQuery no JSBin -->
     <!-- Não é utilizado pro jogo da vida, somente conecta botões com
@@ -99,7 +128,7 @@
        var context = canvas.getContext("2d");  // "contexto do desenho"
 
        // pouquinho maior que as dimensões definidas acima
-       canvas.width = 450;  // largura
+       canvas.width = 432;  // largura
        canvas.height = 300;  // altura
 
        // bordas das células
