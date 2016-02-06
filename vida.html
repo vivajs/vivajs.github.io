@@ -44,26 +44,39 @@
      img {
          vertical-align: middle;
      }
-          
+
+     .oculto {
+         display: none;
+     }
+
+     .divTitulo {
+         padding: 10px 0;
+     }
+     
+     .titulo {
+         font-size: 18px;
+     }
+
+     #exibirURL {
+         font-size: 14px;
+         font-style: italic;
+         color: green;
+     }
+     
     </style>
   </head>
   <body>
     <div class="back"><a href="index.html">&lt;&lt; Voltar à página principal</a></div>
 
-    <h2>Jogo da Vida de Conway</h2>
+    <div class="divTitulo">
+      <span class="titulo">Jogo da Vida de Conway</span>
+      <span id="exibirURL"> - Exibir URL</span>
+    </div>
+
+    <div class="oculto">
+      <h1>http://vivajs.com/vida.html</h1>
+    </div>
     
-    <h1>http://vivajs.com/vida.html</h1>
-
-    <h2>
-      <a href="https://www.youtube.com/watch?v=OsDiqR5Qesk"><img src="img/youtube.png" alt="YouTube"> Veja como foi feito no YouTube</a>
-    </h2>
-    
-    <h2>
-      <a href="http://jsbin.com/wirebizoca/edit?html,js,output">Edite no JSBin</a>
-    </h2>
-
-    <hr>
-
     <!-- Definir botões de controle -->
     <button id="animacao">Inicie animação</button>
     <button id="pare">Pare</button>
@@ -76,6 +89,16 @@
     <canvas id="canvas"></canvas>
 
     <br>
+
+    <h2>
+      <a href="https://www.youtube.com/watch?v=OsDiqR5Qesk"><img src="img/youtube.png" alt="YouTube"> Veja como foi feito no YouTube</a>
+    </h2>
+    
+    <h2>
+      <a href="http://jsbin.com/wirebizoca/edit?html,js,output"><img src="img/jsbin.png" alt="JSBin"> Edite no JSBin</a>
+    </h2>
+
+
     Atualizado 5 fev 2016
     
     <!-- adicionar biblioteca jQuery no JSBin -->
@@ -417,6 +440,14 @@
        
        tabuleiro.desenhe();
      })();
+    </script>
+
+    <!-- exibir URL -->
+    <script>
+     document.getElementById("exibirURL").addEventListener("click", function() {
+       document.querySelector(".oculto").style.display = "block";
+       this.style.display = "none";
+     });
     </script>
   </body>
 </html>
