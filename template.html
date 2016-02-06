@@ -2,31 +2,114 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Viva JS! </title>
+    <title>Jogo da Vida de Conway com Canvas</title>
     <style>
-     h1 {
+     body {
          font-family: sans-serif;
+         text-align: center;
+         margin: 0;
+         padding: 0;
+     }
+     
+     h1 {
          font-size: 32px;
      }
 
      h2 {
-         font-family: sans-serif;
          font-size: 18px;
      }
      
      h2 a {
-         font-family: sans-serif;
          font-size: 20px;
          text-decoration: none;
+     }
+
+     .back {
+         background-color: sandyBrown;
+         font-size: 16px;
+         text-decoration: none;
+         padding-top: 10px;
+         padding-bottom: 5px;
+         border-bottom: 12px solid blanchedAlmond;
+     }
+     
+     .back a {
+         font-style: italic;
+         font-weight: bold;
+         text-decoration: none;
+     }
+
+     img {
+         vertical-align: middle;
+     }
+
+     .oculto {
+         display: none;
+     }
+
+     .divTitulo {
+         padding: 10px 0;
+     }
+     
+     .titulo {
+         font-size: 18px;
+     }
+
+     #exibirURL {
+         font-size: 14px;
+         font-style: italic;
+         color: blue;
      }
      
     </style>
   </head>
   <body>
-    <a href="index.html">Voltar</a>
-    <br>
+    <div class="back"><a href="index.html">&lt;&lt; Voltar à página principal</a></div>
+
+    <div class="divTitulo">
+      <span class="titulo">Jogo</span>
+      <span id="exibirURL"> - Exibir URL</span>
+    </div>
+
+    <div class="oculto">
+      <h1>http://vivajs.com/.html</h1>
+    </div>
     
+    <!-- Canvas, ou tela -->
+    <canvas id="canvas"></canvas>
+
+    <br>
+
+    <h2>
+      <a href="https://www.youtube.com/"><img src="img/youtube.png" alt="YouTube"> Veja como foi feito no YouTube</a>
+    </h2>
+    
+    <h2>
+      <a href="http://jsbin.com/"><img src="img/jsbin.png" alt="JSBin"> Edite no JSBin</a>
+    </h2>
+
+
+    Atualizado 2016
+    
+    <!-- adicionar biblioteca jQuery no JSBin -->
+    <!-- Não é utilizado pro jogo da vida, somente conecta botões com
+    funções JavaScript -->
+    <script src="external/jquery-2.2.0.min.js"></script>
+
+    <!-- fechar painel HTML -->
+
     <script>
+     "use strict";
+
+     
+    </script>
+
+    <!-- exibir URL -->
+    <script>
+     document.getElementById("exibirURL").addEventListener("click", function() {
+       document.querySelector(".oculto").style.display = "block";
+       this.style.display = "none";
+     });
     </script>
   </body>
 </html>
