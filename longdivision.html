@@ -2,22 +2,25 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Jogo</title>
+    <title>Long division</title>
     <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
     <div class="back"><a href="index.html">&lt;&lt; Voltar à página principal</a></div>
 
     <div class="divTitulo">
-      <span class="titulo">Jogo</span>
+      <span class="titulo">Long division</span>
       <span id="exibirURL"> - Exibir URL</span>
     </div>
 
     <div class="oculto">
-      <h1>http://vivajs.com/.html</h1>
+      <h1>http://vivajs.com/longdivision.html</h1>
     </div>
 
     <!-- Content -->
+    <input id="dividend" size="6"> &divide; <input id="divisor" size="6"> <button id="equals">Calculate</button><br>
+    <input id="quotient"><br>
+    <textarea id="board" rows="15" cols="60"></textarea>
     
     <h2>
       <a href="https://www.youtube.com/"><img src="img/youtube.png" alt="YouTube"> Veja como foi feito no YouTube</a>
@@ -28,7 +31,7 @@
     </h2>
 
 
-    Atualizado fev 2016
+    Atualizado 8 fev 2016
     
     <!-- adicionar biblioteca jQuery no JSBin -->
     <!-- Não é utilizado pro jogo da vida, somente conecta botões com
@@ -36,7 +39,7 @@
     <script src="external/jquery-2.2.0.min.js"></script>
 
     <!-- fechar painel HTML -->
-
+    
     <!-- exibir URL -->
     <script>
      document.getElementById("exibirURL").addEventListener("click", function() {
@@ -47,8 +50,18 @@
 
     <script>
      "use strict";
+     function compute() {
+       var dividend = parseInt(document.getElementById("dividend").value);
+       var divisor = parseInt(document.getElementById("divisor").value);
 
+       var board = document.getElementById("board");
+
+       
+     }
      
+     document.getElementById("equals").addEventListener("click", function() {
+       compute();
+     });
     </script>
   </body>
 </html>
