@@ -19,6 +19,11 @@
 
     <!-- Content -->
     <input id="dividend" size="6"> &divide; <input id="divisor" size="6"> <button id="equals">Calculate</button><br>
+    <input id="float">
+    <br>
+    
+    <button id="clear">Clear</button><br>
+    
     <input id="quotient"><br>
     <textarea id="board" rows="15" cols="60"></textarea>
     
@@ -50,17 +55,78 @@
 
     <script>
      "use strict";
+     function getFirstNDigits(number, n) {
+       // first 2 digits of 12999 is 12
+       var numberLength = number.toString().length;
+       var digitsOnRight = numberLength - n;
+       return Math.floor(number / Math.pow(10, digitsOnRight));
+     }
+
+     function getRemainingDigits(number, n) {
+       return number.toString().slice(n);
+     }
+     
      function compute() {
        var dividend = parseInt(document.getElementById("dividend").value);
        var divisor = parseInt(document.getElementById("divisor").value);
 
+       var quotient = document.getElementById("quotient");
        var board = document.getElementById("board");
 
-       
+       var dividendLength  = dividend.toString().length;
+       var decimalPlace = dividendLength;
+
+       var remainder = 0;
+
+       board.add = function(text) {
+         this.value += text + "\n";
+       };
+
+       quotient.add = function(text) {
+         this.value += text + "\n";
+       };
+
+       document.getElementById("float").value = dividend / divisor;
+
+       var dividendDigits = dividend.toString();
+       var partialDividend = parseInt(dividendDigits.slice(0, divisor.toString().length));
+
+       var nextDigit = divisor.toString().length;
+       // for (var i = 0; i < dividendDigits.length; i++) {
+
+       while (nextDigit <= dividend.toString().length) {
+         
+         board.add("trying " + partialDividend);
+
+         if (partialDividend >= divisor) {
+           var multiple = Math.floor(partialDividend / divisor);
+           quotient.add(multiple);
+           board.add("adding multiple " + multiple + " to quotient");
+           partialDividend -= divisor * multiple;
+           board.add("remainder " + partialDividend);
+         } else {
+           board.add("partialDividend < divisor");
+           quotient.add("0");
+           // partialDividend = parseInt(dividendDigits.slice(0, divisor.toString().length + 1));
+         }
+         partialDividend = parseInt(partialDividend.toString() + dividendDigits[nextDigit]);
+         nextDigit++;
+       }
+
+       quotient.add(" remainder " + partialDividend);
+
+       // remove leading zeros
+       quotient.value = quotient.value.replace(/^0+/, '');
      }
-     
+
      document.getElementById("equals").addEventListener("click", function() {
+       document.getElementById("clear").click();
        compute();
+     });
+
+     document.getElementById("clear").addEventListener("click", function() {
+       document.getElementById("quotient").value = "";
+       document.getElementById("board").value = "";
      });
     </script>
   </body>
