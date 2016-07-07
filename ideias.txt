@@ -1,6 +1,0 @@
-QBasic Gorilla
-Arkanoid / Breakout
-Snake
-Turtle Logo fractals, Koch curve like Downey's Think Python
-Tetris
-Screen 16
