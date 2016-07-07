@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Drawing shapes with JavaScript</title>
+    <link rel=stylesheet href="../css/ejs-sandbox.css">
+  </head>
+  <body>
+    <article>
+
+      <h1>Let's draw shapes!</h1>
+
+      <p>
+        I have digitized my pet turtle Derek to assist us in a few geometric endeavors.
+      </p>
+      
+      <p>
+        Derek never listened to my orders, but I wired a JavaScript chip in him enabling me to control his movements through the blue boxes in this page. They should be fully interactive in a modern browser.
+      </p>
+
+      <p>
+        Derek responds to the commands <code>forward(distance)</code> and <code>turnRight(degrees)</code>. They will compel him to draw a line in the direction he is facing, and to turn right (clockwise) the given amount of degrees.
+      </p>
+
+      <p>
+        When I shoved Derek through the Ethernet port, I accidentally injured his left leg, so he is unable to turn left.
+      </p>
+
+      <p>
+        Derek tells me the new world makes him feel square, so I will have him draw a square to help him get acquainted with the new surroundings. Without thinking too hard, I tell him:
+      </p>
+      
+      <pre data-language="text/html">
+forward(50); 
+turnRight(90);
+
+forward(50); 
+turnRight(90);
+
+forward(50); 
+turnRight(90);
+
+forward(50);
+
+console.log("First try at drawing a square");</pre>
+
+      <p>
+        Derek is pleased, but now he wants a bigger square. I could search and replace all the 50s with a larger number, but what if he then asks for an even bigger square? It gets old fast.
+      </p>
+
+      <p>
+        I know, let's use variables! Then I will only need to change the code in one place later on.
+      </p>
+
+      <pre data-language="text/html">
+var sideLength = 100;
+
+forward(sideLength); 
+turnRight(90);
+
+forward(sideLength); 
+turnRight(90);
+
+forward(sideLength); 
+turnRight(90);
+
+forward(sideLength);</pre>
+
+      <p>
+        Try helping Derek too by playing with the code! Adjust the size of Derek's square and click on the green arrow to redraw the square. Or, you may also press Ctrl-Enter.
+      </p>
+
+      <p>
+        Derek now calls me Stuttering Sam, because I repeat <code>forward</code> 4 times. Fortunately, JavaScript has loops that help us reduce clutter and repetition.
+      </p>
+
+      <pre data-language="text/html">
+var sideLength = 30;
+var numberOfSides = 4;
+
+for (var i = 0; i &lt; numberOfSides; i++) {
+  forward(sideLength);
+  turnRight(90);
+}</pre>
+
+      <p>
+        Now Derek is willing to take on a challenge. Squares are, well, too square. He wants to experience all the joy of two-dimensional existence, and draw shapes with all number of sides. 
+      </p>
+
+      <p>
+        Do you think he can handle a circle? Is a 10,000-sided shape close enough? (Spoiler: don't try it).
+      </p>
+
+      <pre data-language="text/html">
+// Choose your polygon's number of sides 
+var sides = 6;  // hexagon
+
+var sideLength = 50;
+var interiorAngle = (sides - 2) * 180 / sides;  // geometric formula
+var turnAngle = 180 - interiorAngle;
+
+for (var i = 0; i &lt; sides; i++) {
+  forward(sideLength);
+  turnRight(turnAngle);
+}</pre>
+
+      <hr>
+
+      Credits: <br><br>
+      The interactive code boxes are a component of <a href="http://eloquentjavascript.net/">Eloquent JavaScript</a><br>
+      Copyright (c) 2015 Marijn Haverbeke
+
+      <br><br>
+
+      Story (c) 2016 Heitor Chang. Licensed under <a href="https://creativecommons.org/licenses/by-nc/3.0/">CC BY-NC 3.0</a>
+
+      <br><br>
+      <br><br>
+      <br><br>
+      <br><br>
+      <br><br>
+      <br><br>
+      <br><br>
+      <br><br>
+      <br><br>
+
+    </article>
+    <script src="../js/ejs-codemirror.js"></script>
+    <script src="../js/ejs-tartaruga.js"></script>
+    <script src="../js/ejs-sandbox.js"></script>
+  </body>
+</html>
