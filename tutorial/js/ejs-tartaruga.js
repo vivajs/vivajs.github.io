@@ -1,13 +1,13 @@
 var tartarugaCode = "\n\
   <style> \n\
   body { \n\
-    max-height: 400px; \n\
+    max-height: 360px; \n\
     overflow: hidden; \n\
   } \n\
  \n\
 #canvasContainer { \n\
-  width: 600px; \n\
-  height: 400px; \n\
+  width: 780px; \n\
+  height: 360px; \n\
   top: 0; \n\
   left: 0; \n\
   border: 2px dotted #AAA \n\
@@ -31,8 +31,8 @@ var tartarugaCode = "\n\
   <body> \n\
    \n\
   <div id='canvasContainer'> \n\
-  <canvas id='desenhoCanvas' width='600' height='400'></canvas> \n\
-  <canvas id='tartarugaCanvas' width='600' height='400'></canvas> \n\
+  <canvas id='desenhoCanvas' width='780' height='360'></canvas> \n\
+  <canvas id='tartarugaCanvas' width='780' height='360'></canvas> \n\
   </div> \n\
  \n\
 </body> \n\

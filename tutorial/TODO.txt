@@ -1,0 +1,15 @@
+Use PCL HTML library and add condition to HTMLEntitify the
+code in <pre> tags
+
+Since code in boxes are independent of each other, "preload" necessary
+functions as a separate file, just like how ejs-tartaruga loads
+canvas and turtle code
+
+Dicionario para nomes de erros
+
+Consolidar termos tecnicos e sinonimos num lugar
+
+"Fiddle" page with textarea and canvas, can save and load to
+localstorage under given names
+
+Navigation for chapters and sections

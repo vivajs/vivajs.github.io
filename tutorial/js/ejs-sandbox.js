@@ -628,21 +628,14 @@ window.addEventListener("load", function() {
   function runCode(data) {
     data.output.clear();
 
-    var val = tartarugaCode;
-    
-    // EDIT begin tartaruga code here
-    // var val = data.editor.getValue();
-
-
-    // END Tartaruga code
-    //
-
-    // enclose user input to avoid displaying it
-    val += "<script>";
-    
-    val += data.editor.getValue();
-
-    val += "</script>";
+    if (tartarugaCode && data.isHTML) {
+      var val = tartarugaCode;
+      val += "<script>";
+      val += data.editor.getValue();
+      val += "</script>";
+    } else {
+      var val = data.editor.getValue();
+    }
     
     var sb = data.sandbox;
     getSandbox(data.sandbox, data.isHTML, function(box) {
