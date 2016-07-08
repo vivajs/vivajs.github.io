@@ -6,5 +6,6 @@
         (out (concatenate 'string
                           (slice filename 0 -5) ".html")
              :direction :output)
-      (with-html-output (out :pretty t)
+      (format out "<!DOCTYPE html>~%")
+      (with-html-output (out)
         (emit-html (read in))))))

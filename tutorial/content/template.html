@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang='en'>
   <head>
     <meta charset='utf-8'>
@@ -7,25 +8,21 @@
   <body>
     <article>
     <p>content</p>
-    <pre data-language='text/html'>
-forward(50);
+    <pre data-language='text/html'>forward(50);
 turnRight(30);
-forward(20);
-    </pre>
+forward(70);</pre>
     <p>Just Text</p>
-    <pre data-language='javascript'>
-function sq(x) {
+    <pre data-language='javascript'>function sq(x) {
   return x * x;
 }
 
-console.log(sq(9));
-    </pre>
+console.log(sq(9));</pre>
+    <p>Does a previous definition carry over?</p>
+    <pre data-language='javascript'>console.log(sq(9) &gt; 50);</pre>
+    <pre data-language='javascript'>console.log("Hello");</pre>
     </article>
-    <script src='../js/ejs-codemirror.js'>
-    </script>
-    <script src='../js/ejs-tartaruga.js'>
-    </script>
-    <script src='../js/ejs-sandbox.js'>
-    </script>
+    <script src='../js/ejs-codemirror.js'></script>
+    <script src='../js/ejs-tartaruga.js'></script>
+    <script src='../js/ejs-sandbox.js'></script>
   </body>
 </html>
