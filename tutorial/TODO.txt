@@ -1,5 +1,7 @@
-Use PCL HTML library and add condition to HTMLEntitify the
-code in <pre> tags
+Embed Lisp variables and forms in HTML generation. otherwise it is no
+better than plain HTML
+
+Navigation for chapters and sections
 
 Since code in boxes are independent of each other, "preload" necessary
 functions as a separate file, just like how ejs-tartaruga loads
@@ -12,4 +14,3 @@ Consolidar termos tecnicos e sinonimos num lugar
 "Fiddle" page with textarea and canvas, can save and load to
 localstorage under given names
 
-Navigation for chapters and sections
