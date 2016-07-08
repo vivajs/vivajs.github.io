@@ -6,6 +6,7 @@
   (:link :rel "stylesheet" :href "../css/ejs-sandbox.css"))
  (:body
   (:article
+   (:h2 "ARTICLE HEADING")
    (:p "content")
    
    (:pre :data-language "text/html"
