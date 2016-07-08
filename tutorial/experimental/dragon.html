@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Drawing shapes with JavaScript</title>
+    <link rel=stylesheet href="../css/ejs-sandbox.css">
+  </head>
+  <body>
+    <article>
+
+      <h1>Dragon curve</h1>
+
+      <pre data-language="text/html">
+rt(90);
+fd(20);
+jump(20);
+fd(20);
+jump(20);
+fd(20);
+jump(20);
+      </pre>
+      
+      <pre data-language="text/html">
+fd(20);
+penOff();
+rt(90);
+fd(20);
+penOn();
+rt(90);
+fd(20);
+penOff();
+rt(90);
+fd(20);
+penOn();
+
+      </pre>
+      
+      Turtle Box
+      <a href="http://www.fractalcurves.com/Turtle.html" target="_blank">http://www.fractalcurves.com/Turtle.html</a>
+      <pre data-language="text/html">
+// trouble with jumping / turning pen off
+rt(180);
+jump(50);
+rt(180);
+
+rt(270);
+jump(100);
+rt(90);
+
+rt(90);
+function drawDragon(length) {
+  if (length &gt; 4) {
+    rt(270);
+
+    drawDragon(length/2);
+    rt(135);
+
+    drawDragon(Math.sqrt(2 * (length/2) * (length/2)));
+    rt(360-45);
+
+    jump(length/2);
+
+    rt(180);
+    drawDragon(length/2);
+
+    rt(180);
+    jump(length/2);
+  } else {
+    fd(length);
+  }
+}
+drawDragon(202);
+      </pre>
+    </article>
+    <script src="../js/ejs-codemirror.js"></script>
+    <script src="../js/fast-tartaruga.js"></script>
+    <script src="../js/ejs-sandbox.js"></script>
+  </body>
+</html>

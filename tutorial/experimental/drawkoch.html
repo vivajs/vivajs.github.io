@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Drawing shapes with JavaScript</title>
+    <link rel=stylesheet href="../css/ejs-sandbox.css">
+  </head>
+  <body>
+    <article>
+
+      <h1>Koch curve</h1>
+
+      Turtle Box
+      
+      <pre data-language="text/html">
+function drawKoch(length) {
+  if (length &gt; 5) {
+    drawKoch(length/3);
+    rt(300);
+    drawKoch(length/3);
+    rt(120);
+    drawKoch(length/3);
+    rt(300);
+    drawKoch(length/3);
+  } else {
+    fd(length);
+  }
+}
+      </pre>
+    </article>
+    <script src="../js/ejs-codemirror.js"></script>
+    <script src="../js/ejs-tartaruga.js"></script>
+    <script src="../js/ejs-sandbox.js"></script>
+  </body>
+</html>

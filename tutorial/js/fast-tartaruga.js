@@ -52,8 +52,8 @@ desenhoCtx.strokeStyle = 'black'; \n\
 desenhoCtx.lineWidth = 1; \n\
  \n\
 var opcoesAnimacao = { \n\
-  tamanhoFragmento: 5, \n\
-  intervalo: 10,  // INTERVALO padrao = 10 \n\
+  tamanhoFragmento: 4, \n\
+  intervalo: 1,  // INTERVALO padrao = 10 \n\
 }; \n\
  \n\
 function definaIntervalo(novoIntervalo) { \n\
@@ -158,6 +158,7 @@ Tartaruga.prototype.alterneVisibilidade = function() { \n\
 }; \n\
  \n\
 Tartaruga.prototype.desenheSe = function() { \n\
+  return; // NAO DESENHAR \n\
   var x = this.cabeca.x; \n\
   var y = this.cabeca.y; \n\
   var altura = this.altura; \n\
