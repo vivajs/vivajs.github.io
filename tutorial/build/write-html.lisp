@@ -1,11 +1,27 @@
 (cd-viva)
 
-(defun write-html (filename)
-  (with-open-file (in filename)
-    (with-open-file
-        (out (concatenate 'string
-                          (slice filename 0 -5) ".html")
-             :direction :output)
-      (format out "<!DOCTYPE html>~%")
-      (with-html-output (out)
-        (emit-html (read in))))))
+(defmacro write-html-mac (filename)
+  (pcl-with-gensyms
+   (in)
+   (with-open-file (in filename)
+     `(with-html-to-file ((concatenate
+                           'string
+                           (slice ,filename 0 -5) ".html"))
+        (html ,@(read in))))))
+
+;; (defun write-html (filename)
+;;   (with-open-file (in filename)
+;;     (with-html-to-file ((concatenate
+;;                          'string
+;;                          (slice filename 0 -5) ".html"))
+;;       (html (read in)))))
+
+;; (defmacro read-html-mac (filename)
+;;   (with-open-file (in filename)
+;;     `(html ,@(read in))))        
+           
+;; (defun read-html (filename)
+;;   (with-open-file (in filename)
+;;     ;; (html (read in))))
+;;     (html (:b "bold"))
+;;     (read in)))

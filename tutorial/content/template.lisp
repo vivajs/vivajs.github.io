@@ -37,7 +37,3 @@ console.log(sq(9));")
    ) ;; END article
   ) ;; END body
  ) ;; END html
-
-
-
-
