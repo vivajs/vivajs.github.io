@@ -303,7 +303,7 @@ article {
     margin: 0 auto;
     /* max-width: 35em; */
     max-width: 600px;
-    padding: 2em 0 5em 0;
+    padding: 5px 0 1em 0;
     position: relative;
 }
 
@@ -730,4 +730,13 @@ td + td {
 
 table {
     margin-left: 15px;
+}
+
+header, footer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.imgNav {
+    padding: 0 6px 0 6px;
 }

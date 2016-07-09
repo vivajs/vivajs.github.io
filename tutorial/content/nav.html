@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Polygons</title>
+    <link rel='stylesheet' href='../css/ejs-sandbox.css'>
+    <script src='../js/ejs-codemirror.js'>
+    </script>
+    <script src='../js/ejs-tartaruga.js'>
+    </script>
+    <script src='../js/ejs-sandbox.js'>
+    </script>
+  </head>
+  <body>
+    <header>
+      <a class="imgNav" href="prev.html"><img src="img/prev.png"></a>
+      <a class="imgNav" href="index.html"><img src="img/home.png"></a>
+      <a class="imgNav" href="next.html"><img src="img/next.png"></a>
+    </header>
+    
+    <article>
+    <h2>Load a script Template</h2>
+    <p>Draw a polygon</p>
+    <pre data-language='text/html'>
+// polygon.js
+// Choose your polygon's number of sides 
+var sides = 6;  // hexagon
+
+var sideLength = 50;
+var interiorAngle = (sides - 2) * 180 / sides;  // geometric formula
+var turnAngle = 180 - interiorAngle;
+
+for (var i = 0; i &lt; sides; i++) {
+  forward(sideLength);
+  turnRight(turnAngle);
+}
+    </pre>
+    </article>
+
+    <footer>
+      <a class="imgNav" href="prev.html"><img src="img/prev.png"></a>
+      <a class="imgNav" href="index.html"><img src="img/home.png"></a>
+      <a class="imgNav" href="next.html"><img src="img/next.png"></a>
+    </footer>
+  </body>
+</html>
