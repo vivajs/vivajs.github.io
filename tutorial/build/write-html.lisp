@@ -20,12 +20,14 @@
           (:head
            (:meta :charset "utf-8")
            (:title ,title)
-           (:link :rel "stylesheet" :href "../css/ejs-sandbox.css")
+           (:link :rel "stylesheet" :href "../css/ejs-sandbox.css"))
+          (:body
+           ,(read in)
            (:script :src "../js/ejs-codemirror.js")
            (:script :src "../js/ejs-tartaruga.js")
-           (:script :src "../js/ejs-sandbox.js"))
-          (:body
-           ,(read in))))))))
+           (:script :src "../js/ejs-sandbox.js")
+           (:script :src "../js/feature-check.js"))))))))
+
 
 ;; https://www.rosettacode.org/wiki/Read_entire_file#Common_Lisp
 (defun load-file-as-string (path)

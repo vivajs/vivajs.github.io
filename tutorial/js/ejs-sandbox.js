@@ -643,6 +643,7 @@ window.addEventListener("load", function() {
 
     // EDIT Try resetting sandbox to new state for ES6 redeclartion
     // Execute only with JavaScript (non-turtle) boxes
+    // Boxes are now independent of each other
     if (!data.isHTML) {
       resetSandbox(data.sandbox);
     }
