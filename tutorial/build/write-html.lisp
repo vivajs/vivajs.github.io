@@ -8,7 +8,7 @@
 
 (defparameter *structure*
   ;; new-chapterp (t starts new chapter) filename title
-  '((t "caminho-do-programa")
+  '((t "o-caminho-do-programa")
     (nil "o-que-e-um-programa")
     (nil "o-primeiro-programa")
     (nil "glossario-1")
@@ -33,7 +33,7 @@
           (setf prev-filename "index.html")
           (setf prev-filename (cadr (nth (- n 1) *structure*))))
       (setf cur-filename (cadr (nth n *structure*)))
-      (if (= n (length *structure*))
+      (if (= n (- (length *structure*) 1))
           (setf next-filename "end.html")
           (setf next-filename (cadr (nth (+ n 1) *structure*))))
       
@@ -42,16 +42,20 @@
           (progn 
             (incf chapter)
             (setf subsection 0)))
-      (format t "~a~a ~a~%"
+      (format t "~a~a (P)~a ~a (N)~a~%"
               chapter
               (if (> subsection 0)
                   (format nil ".~a" subsection)
                   "")
-              (cadr cur-elem)))))
+              prev-filename
+              (cadr cur-elem)
+              next-filename))))
 
-(defmacro write-html-article (filename)
+(defmacro write-html-article (filename prev next)
   (let ((lisp-filename (concatenate 'string filename ".lisp"))
         (html-filename (concatenate 'string filename ".html"))
+        (prev-filename (concatenate 'string prev ".html"))
+        (next-filename (concatenate 'string next ".html"))
         (html-title (replace-all
                      (concatenate 'string "Viva JS! "
                                   (string-capitalize filename))
@@ -68,7 +72,24 @@
              (:title ,html-title)
              (:link :rel "stylesheet" :href "../css/ejs-sandbox.css"))
             (:body
+             (:header
+              (:a :class "imgNav" :href ,prev-filename
+                  (:img :src "img/prev.png" :alt "prev"))
+              (:a :class "imgNav" :href "index.html"
+                  (:img :src "img/home.png" :alt "home"))
+              (:a :class "imgNav" :href ,next-filename
+                  (:img :src "img/next.png" :alt "next")))
+             
              ,(read in)
+             
+             (:footer
+              (:a :class "imgNav" :href ,prev-filename
+                  (:img :src "img/prev.png" :alt "prev"))
+              (:a :class "imgNav" :href "index.html"
+                  (:img :src "img/home.png" :alt "home"))
+              (:a :class "imgNav" :href ,next-filename
+                  (:img :src "img/next.png" :alt "next")))
+
              (:script :src "../js/ejs-codemirror.js")
              (:script :src "../js/ejs-tartaruga.js")
              (:script :src "../js/ejs-sandbox.js")
