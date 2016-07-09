@@ -4,6 +4,9 @@ Since code in boxes are independent of each other, "preload"
 necessary functions as a separate file, just like how ejs-tartaruga
 loads canvas and turtle code
 
+Keep all JS files in content/js and load them into each article
+with Lisp
+
 Dicionario para nomes de erros, consolidar termos tecnicos e
 sinonimos num lugar
 
