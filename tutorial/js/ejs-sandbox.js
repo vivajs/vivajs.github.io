@@ -601,6 +601,8 @@ window.addEventListener("load", function() {
 
   function openMenu(data, node) {
     var menu = elt("div", {"class": "sandbox-open-menu"});
+    // var items = [["Run code (ctrl-enter)", function() { runCode(data); }],
+
     var items = [["Run code (ctrl-enter)", function() { runCode(data); }],
                  ["Revert to original code", function() { revertCode(data); }],
                  ["Reset sandbox (ctrl-q)", function() { resetSandbox(data.sandbox); }]];
@@ -638,6 +640,13 @@ window.addEventListener("load", function() {
     }
     
     var sb = data.sandbox;
+
+    // EDIT Try resetting sandbox to new state for ES6 redeclartion
+    // Execute only with JavaScript (non-turtle) boxes
+    if (!data.isHTML) {
+      resetSandbox(data.sandbox);
+    }
+    
     getSandbox(data.sandbox, data.isHTML, function(box) {
       if (data.isHTML)
         box.setHTML(val, data.output, function() {

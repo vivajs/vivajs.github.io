@@ -12,7 +12,8 @@
    (with-open-file (in filename)
      `(with-html-to-file ((concatenate
                            'string
-                           (slice ,filename 0 -5) ".html"))
+                           (slice ,filename 0 -5) ".html")
+                          :pretty nil)
         (html
          (:html
           :lang "en"

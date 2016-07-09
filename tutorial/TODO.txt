@@ -1,3 +1,5 @@
+commonlisp/lib/html.lisp: leave :pre as block element
+
 Navigation for chapters and sections
 
 Since code in boxes are independent of each other, "preload"
@@ -14,3 +16,4 @@ sinonimos num lugar
 localstorage under given names
 
 "Super fast" mode with no animation
+
