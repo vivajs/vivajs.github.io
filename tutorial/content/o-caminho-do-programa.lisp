@@ -1,5 +1,4 @@
-(:article
- (:h2 "O Caminho do programa")
+(:section
 
  (:p "Content for Turtle")
 
@@ -22,4 +21,4 @@ console.log(sq(9));")
  (:pre :data-language "text/html"
        (:print (load-file-as-string "js/polygon.js")))
  
- ) ;; END article
+ ) ;; END section

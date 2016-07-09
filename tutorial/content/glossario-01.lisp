@@ -1,9 +1,8 @@
-(:article
- (:h2 "Glossário")
+(:section
 
  (:p "")
 
  (:pre :data-language "text/html"
        "")
  
- ) ;; END article
+ ) ;; END section

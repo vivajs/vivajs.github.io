@@ -1,9 +1,8 @@
-(:article
- (:h2 "O primeiro programa")
+(:section
 
  (:p "")
 
  (:pre :data-language "text/html"
        "")
  
- ) ;; END article
+ ) ;; END section
