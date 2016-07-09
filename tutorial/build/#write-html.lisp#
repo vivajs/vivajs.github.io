@@ -33,7 +33,7 @@
           (setf prev-filename "index.html")
           (setf prev-filename (cadr (nth (- n 1) *structure*))))
       (setf cur-filename (cadr (nth n *structure*)))
-      (if (= n (length *structure*))
+      (if (= n (- (length *structure*) 1))
           (setf next-filename "end.html")
           (setf next-filename (cadr (nth (+ n 1) *structure*))))
       
@@ -49,11 +49,13 @@
                   "")
               prev-filename
               (cadr cur-elem)
-              next-filename
+              next-filename))))
 
-(defmacro write-html-article (filename)
+(defmacro write-html-article (filename prev next)
   (let ((lisp-filename (concatenate 'string filename ".lisp"))
         (html-filename (concatenate 'string filename ".html"))
+        (prev-filename (concatenate 'string prev ".html"))
+        (next-
         (html-title (replace-all
                      (concatenate 'string "Viva JS! "
                                   (string-capitalize filename))
