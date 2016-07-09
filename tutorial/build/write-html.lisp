@@ -27,7 +27,7 @@
            ,(read in))))))))
 
 ;; https://www.rosettacode.org/wiki/Read_entire_file#Common_Lisp
-(defun file-string (path)
+(defun load-file-as-string (path)
   (with-open-file (stream path)
     (let ((data (make-string (file-length stream))))
       (read-sequence data stream)
