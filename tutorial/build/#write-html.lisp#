@@ -42,12 +42,14 @@
           (progn 
             (incf chapter)
             (setf subsection 0)))
-      (format t "~a~a ~a~%"
+      (format t "~a~a (P)~a ~a (N)~a~%"
               chapter
               (if (> subsection 0)
                   (format nil ".~a" subsection)
                   "")
-              (cadr cur-elem)))))
+              prev-filename
+              (cadr cur-elem)
+              next-filename
 
 (defmacro write-html-article (filename)
   (let ((lisp-filename (concatenate 'string filename ".lisp"))
