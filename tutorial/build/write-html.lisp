@@ -8,10 +8,10 @@
 
 (defparameter *structure*
   ;; new-chapterp (t starts new chapter) filename title
-  '((t "o-caminho-do-programa")
-    (nil "o-que-e-um-programa")
+  '((t "o-caminho-do-programa" "O caminho do programa")
+    (nil "o-que-e-um-programa" "O que é um programa?")
     (nil "o-primeiro-programa")
-    (nil "glossario-1")
+    (nil "glossario-01")
     (t "variaveis-expressoes-e-instrucoes")
     (nil "instrucoes-de-atribuicao")
     (t "funcoes")
@@ -42,7 +42,7 @@
           (progn 
             (incf chapter)
             (setf subsection 0)))
-      (format t "~a~a (P)~a ~a (N)~a~%"
+      (format t "~a~a (P) ~a (C) ~a (N) ~a~%"
               chapter
               (if (> subsection 0)
                   (format nil ".~a" subsection)
@@ -58,12 +58,12 @@
         (next-filename (concatenate 'string next ".html"))
         (html-title (replace-all
                      (concatenate 'string "Viva JS! "
-                                  (string-capitalize filename))
+                                  (string-capitalize filename :end 1))
                      "-" " ")))
     (pcl-with-gensyms
      (in)
      (with-open-file (in lisp-filename)
-       `(with-html-to-file (,html-filename :pretty nil)
+       `(with-html-to-file (,html-filename)
           (html
            (:html
             :lang "en"
@@ -79,8 +79,13 @@
                   (:img :src "img/home.png" :alt "home"))
               (:a :class "imgNav" :href ,next-filename
                   (:img :src "img/next.png" :alt "next")))
-             
-             ,(read in)
+
+             (:article
+              (:h2 ,html-title)
+              
+              ,(read in)
+              
+              )  ;; END article
              
              (:footer
               (:a :class "imgNav" :href ,prev-filename

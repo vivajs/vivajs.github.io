@@ -1,5 +1,5 @@
 (:article
- (:h2 "O que é um programa?")
+ (:h2 "O primeiro programa")
 
  (:p "")
 
