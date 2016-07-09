@@ -1,39 +1,30 @@
-(:html
- :lang "en"
- (:head
-  (:meta :charset "utf-8")
-  (:title "TITLE")
-  (:link :rel "stylesheet" :href "../css/ejs-sandbox.css")
-  (:script :src "../js/ejs-codemirror.js")
-  (:script :src "../js/ejs-tartaruga.js")
-  (:script :src "../js/ejs-sandbox.js"))
- (:body
-  (:article
-   (:h2 "ARTICLE HEADING")
-   (:p "content")
-   
-   (:pre :data-language "text/html"
-         "forward(50);
+;;; Run CLISP
+;;; load tutorial/write-html.lisp
+;;; eval whole file (Ctrl-Enter)
+;;; (write-html-article "FILENAME")  ;; no .lisp extension
+
+(:article
+ (:h2 "HEADER")
+
+ (:p "Content for Turtle")
+
+ (:pre :data-language "text/html"
+       "forward(50);
 turnRight(30);
 forward(70);")
-   
-   (:p "Just Text")
-   
-   (:pre :data-language "javascript"
-         "function sq(x) {
+
+ (:p "Just Text")
+
+ (:pre :data-language "javascript"
+       "function sq(x) {
   return x * x;
 }
 
 console.log(sq(9));")
-   
-   (:p "Does a previous definition carry over?")
-   
-   (:pre :data-language "javascript"
-         "console.log(sq(9) > 50);")
-   
-   (:pre :data-language "javascript"
-         "console.log(\"Hello\");")
 
-   ) ;; END article
-  ) ;; END body
- ) ;; END html
+ (:p "Load a script")
+ 
+ (:pre :data-language "text/html"
+       (:print (load-file-as-string "js/polygon.js")))
+ 
+ ) ;; END article

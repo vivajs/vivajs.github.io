@@ -1,29 +1,20 @@
 <!DOCTYPE html>
-<html lang='en'>
-  <head>
-    <meta charset='utf-8'>
-    <title>TITLE</title>
-    <link rel='stylesheet' href='../css/ejs-sandbox.css'>
-    <script src='../js/ejs-codemirror.js'></script>
-    <script src='../js/ejs-tartaruga.js'></script>
-    <script src='../js/ejs-sandbox.js'></script>
-  </head>
-  <body>
-    <article>
-    <h2>ARTICLE HEADING</h2>
-    <p>content</p>
-    <pre data-language='text/html'>forward(50);
+<html lang='en'><head><meta charset='utf-8'><title>Viva JS! Template</title><link rel='stylesheet' href='../css/ejs-sandbox.css'></head><body><article><h2>HEADER</h2><p>Content for Turtle</p><pre data-language='text/html'>forward(50);
 turnRight(30);
-forward(70);</pre>
-    <p>Just Text</p>
-    <pre data-language='javascript'>function sq(x) {
+forward(70);</pre><p>Just Text</p><pre data-language='javascript'>function sq(x) {
   return x * x;
 }
 
-console.log(sq(9));</pre>
-    <p>Does a previous definition carry over?</p>
-    <pre data-language='javascript'>console.log(sq(9) &gt; 50);</pre>
-    <pre data-language='javascript'>console.log("Hello");</pre>
-    </article>
-  </body>
-</html>
+console.log(sq(9));</pre><p>Load a script</p><pre data-language='text/html'>// polygon.js
+// Choose your polygon's number of sides 
+var sides = 6;  // hexagon
+
+var sideLength = 50;
+var interiorAngle = (sides - 2) * 180 / sides;  // geometric formula
+var turnAngle = 180 - interiorAngle;
+
+for (var i = 0; i &lt; sides; i++) {
+  forward(sideLength);
+  turnRight(turnAngle);
+}
+</pre></article><script src='../js/ejs-codemirror.js'></script><script src='../js/ejs-tartaruga.js'></script><script src='../js/ejs-sandbox.js'></script><script src='../js/feature-check.js'></script></body></html>
