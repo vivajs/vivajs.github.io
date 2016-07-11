@@ -1,0 +1,9 @@
+http://exploringjs.com/es6/ch_first-steps.html
+
+Avoid var
+
+String interpolation
+let s = `Hello ${name}`;
+
+
+

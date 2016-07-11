@@ -18,7 +18,8 @@
     (nil "procedimentos-e-os-processos-que-eles-geram" "Procedimentos e os Processos Que Eles Geram")
     (nil "formulando-abstracoes-com-procedimentos-de-alta-ordem" "Formulando Abstrações com Procedimentos de Alta Ordem")
     (t "construindo-abstracoes-com-dados" "Construindo Abstrações com Dados")
-    (t "modularidade-objetos-e-estado" "Modularidade, Objetos, e Estado")))
+    (t "modularidade-objetos-e-estado" "Modularidade, Objetos, e Estado")
+    (t "experimental" "Experimental")))
 
 (defun generate-contents ()
   (let ((chapter 0)
