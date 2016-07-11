@@ -25,7 +25,5 @@ return sum(cube, a, inc, b);
 console.log(customSquare(99));
 
 ")
- 
- (:script :src "customjs/square.js")
- 
+
  ) ;; END section

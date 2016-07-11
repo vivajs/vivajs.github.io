@@ -510,16 +510,38 @@ window.addEventListener("load", function() {
     }
     return node;
   }
+
+  // EDIT: Prevent up/down arrows leaving editor
+  /*
+  CodeMirror.commands[CodeMirror.keyMap.default.Down = "lineDownEscape"] = function(cm) {
+    var cur = cm.getCursor();
+    if (cur.line == cm.lastLine()) {
+      document.activeElement.blur();
+      return CodeMirror.Pass;
+    } else {
+      cm.moveV(1, "line");
+    }
+  };
+  CodeMirror.commands[CodeMirror.keyMap.default.Up = "lineUpEscape"] = function(cm) {
+    var cur = cm.getCursor();
+    if (cur.line == cm.firstLine()) {
+      document.activeElement.blur();
+      return CodeMirror.Pass;
+    } else {
+      cm.moveV(-1, "line");
+    }
+  };
+  */
   
   var keyMap = {
     Esc: function(cm) { cm.display.input.blur(); },
-    "Ctrl-Enter": function(cm) {
-      runCode(cm.state.context, cm.options.editorCustomJS);
-    },
+    "Ctrl-Enter": function(cm) { runCode(cm.state.context); },
     "Ctrl-`": function(cm) { closeCode(cm.state.context); },
 
     // EDIT: REASSIGN CTRL-Q TO REVERT CODE
     "Ctrl-Q": function(cm) { revertCode(cm.state.context); },
+    
+    // "Ctrl-Q": resetSandbox
   };
 
   var nextID = 0;
@@ -540,8 +562,7 @@ window.addEventListener("load", function() {
       mode: "javascript",  // EDIT Force JavaScript mode
       extraKeys: keyMap,
       matchBrackets: true,
-      lineNumbers: true,
-      editorCustomJS: preCustomId,
+      lineNumbers: true
     });
     wrap.style.marginLeft = wrap.style.marginRight = -Math.min(article.offsetLeft, 100) + "px";
     setTimeout(function() { editor.refresh(); }, 600);
@@ -573,6 +594,7 @@ window.addEventListener("load", function() {
                                        isHTML: lang == "text/html",
                                        sandbox: sandbox};
     data.output = new SandBox.Output(out);
+    // menu.addEventListener("click", function() { openMenu(data, menu); });
 
     // EDIT: RUN CODE ON MENU CLICK
     menu.addEventListener("click", function() { runCode(data, preCustomId); });
@@ -583,9 +605,56 @@ window.addEventListener("load", function() {
     setTimeout(function () { runCode(data, preCustomId); }, 600);
   }  // END activateCode
 
+  /*
+  function openMenu(data, node) {
+    var menu = elt("div", {"class": "sandbox-open-menu"});
+    // var items = [["Run code (ctrl-enter)", function() { runCode(data); }],
+
+    var items = [["Run code (ctrl-enter)", function() { runCode(data); }],
+                 ["Revert to original code", function() { revertCode(data); }],
+                 ["Reset sandbox (ctrl-q)", function() { resetSandbox(data.sandbox); }]];
+    if (!data.isHTML || !data.sandbox)
+      items.push(["Deactivate editor (ctrl-`)", function() { closeCode(data); }]);
+    items.forEach(function(choice) {
+      menu.appendChild(elt("div", choice[0]));
+    });
+    function click(e) {
+      var target = e.target;
+      if (e.target.parentNode == menu) {
+        for (var i = 0; i < menu.childNodes.length; ++i)
+          if (target == menu.childNodes[i])
+            items[i][1]();
+      }
+      menu.parentNode.removeChild(menu);
+      window.removeEventListener("click", click);
+    }
+    setTimeout(function() {
+      window.addEventListener("click", click);
+    }, 20);
+    node.offsetParent.appendChild(menu);
+  }  // END openMenu
+  */
 
   function runCode(data, preCustomId) {
     data.output.clear();
+
+    /*
+
+    if (tartarugaCode && data.isHTML) {
+      var val = tartarugaCode;
+      val += "<script>";
+      val += data.editor.getValue();
+      val += "</script>";
+    } else {
+      // inject custom code
+      if (customJS) {
+        var val = customJS;
+        val += data.editor.getValue();
+      } else {
+        var val = data.editor.getValue();
+      }
+    }
+    */
     
     var sb = data.sandbox;
 
@@ -603,6 +672,11 @@ window.addEventListener("load", function() {
             box.win.focus();
         });
       else  {
+        //for(var propertyName in box) {
+          // propertyName is what you want
+          //console.log(propertyName + " : " + box[propertyName]);
+        // }
+        // XXX INSERT CUSTOM JS HERE
         if (preCustomId && myCustomJS[preCustomId]) {
           var val = myCustomJS[preCustomId];
           val += data.editor.getValue();

@@ -88,7 +88,7 @@
                   (:img :src "img/next.png" :alt "next")))
 
              (:script :src "../js/ejs-codemirror.js")
-             (:script :src "../js/ejs-tartaruga.js")
+             (:script :src "../js/ejs-custom.js")
              (:script :src "../js/ejs-sandbox.js")
              (:script :src "../js/feature-check.js")))))))))
 
