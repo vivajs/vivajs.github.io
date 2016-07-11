@@ -31,7 +31,8 @@
       (incf subsection)
       (if (car page)
           (progn 
-            (incf chapter) 
+            (incf chapter)
+            (push '(:br) links)
             (setf subsection 0)))
       (let ((chapter-subsection
              (format nil "~a~a. "
@@ -40,9 +41,10 @@
                          (format nil ".~a" subsection)
                          ""))))
 
-        (push `(:br) links)
         (push `(:a :href ,(concatenate 'string (cadr page) ".html")
-                   ,(concatenate 'string chapter-subsection (caddr page))) links)))
+                   ,(concatenate 'string chapter-subsection (caddr page))) links)
+        (push '(:br) links)))
+
     (reverse links)))
 
 (defmacro write-html-article (filename html-title prev next)
