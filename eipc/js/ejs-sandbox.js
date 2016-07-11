@@ -633,18 +633,25 @@ window.addEventListener("load", function() {
   function runCode(data) {
     data.output.clear();
 
+
     if (tartarugaCode && data.isHTML) {
       var val = tartarugaCode;
       val += "<script>";
       val += data.editor.getValue();
       val += "</script>";
     } else {
-      var val = data.editor.getValue();
+      // inject custom code
+      if (customJS) {
+        var val = customJS;
+        val += data.editor.getValue();
+      } else {
+        var val = data.editor.getValue();
+      }
     }
     
     var sb = data.sandbox;
 
-    // EDIT Try resetting sandbox to new state for ES6 redeclartion
+    // EDIT Try resetting sandbox to new state for ES6 redeclaration
     // Execute only with JavaScript (non-turtle) boxes
     // Boxes are now independent of each other
     if (!data.isHTML) {

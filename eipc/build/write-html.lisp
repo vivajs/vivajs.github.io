@@ -142,7 +142,7 @@
       ;; (format t "~a " (cadr cur-elem))
       ;; define prev, current, and next pages
       (if (< n 1)
-          (setf prev-file "index")
+          (setf prev-file "../index")
           (setf prev-file (cadr (nth (- n 1) *structure*))))
       (setf cur-file (cadr (nth n *structure*)))
       (if (= n (- (length *structure*) 1))

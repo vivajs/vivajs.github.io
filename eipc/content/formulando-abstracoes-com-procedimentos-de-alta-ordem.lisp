@@ -21,7 +21,11 @@ let sumCubes = (a, b) => {
 return sum(cube, a, inc, b);
 }
 
-console.log(sumCubes(1, 10));
-")
+// console.log(sumCubes(1, 10));
+console.log(customSquare(99));
 
+")
+ 
+ (:script :src "customjs/square.js")
+ 
  ) ;; END section
