@@ -6,19 +6,19 @@
 ;; go to "content" folder
 (defun cd-viva ()
   (if (equal (subseq (machine-instance) 7 11) "asus")
-      (ext:cd #P"/home/heitor/vivajs.github.io/pensejs/content/")
-      (ext:cd #P"C:\\Users\\Heitor\\Desktop\\emacs-24.3\\bin\\vivajs.github.io\\pensejs\\content\\")))
+      (ext:cd #P"/home/heitor/vivajs.github.io/eipc/content/")
+      (ext:cd #P"C:\\Users\\Heitor\\Desktop\\emacs-24.3\\bin\\vivajs.github.io\\eipc\\content\\")))
 
 (cd-viva)
 
 (defparameter *structure*
   ;; new-chapterp, where t starts new chapter  filename  title
-  '((t "prefacio" "Prefácio")
-    (t "o-caminho-do-programa" "O caminho do programa")
-    (nil "o-que-e-um-programa" "O que é um programa?")
-    (nil "o-primeiro-programa" "O primeiro programa")
-    (nil "glossario-01" "Glossário")
-    (t "variaveis-expressoes-e-instrucoes" "Variáveis, expressões e instruções")))
+  '((t "construindo-abstracoes-com-procedimentos" "Construindo Abstrações com Procedimentos")
+    (nil "os-elementos-de-programacao" "Os Elementos de Programação")
+    (nil "procedimentos-e-os-processos-que-eles-geram" "Procedimentos e os Processos Que Eles Geram")
+    (nil "formulando-abstracoes-com-procedimentos-de-alta-ordem" "Formulando Abstrações com Procedimentos de Alta Ordem")
+    (t "construindo-abstracoes-com-dados" "Construindo Abstrações com Dados")
+    (t "modularidade-objetos-e-estado" "Modularidade, Objetos, e Estado")))
 
 (defun generate-contents ()
   (let ((chapter 0)
@@ -99,7 +99,7 @@
          (result ""))
         ((null line) result)
       (setf result (concatenate 'string result line (string #\Newline))))))
-
+      
 ;; WRITE-INDEX
 (defmacro write-index ()
   ;; INDEX
