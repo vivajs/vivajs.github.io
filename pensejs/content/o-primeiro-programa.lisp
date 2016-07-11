@@ -8,12 +8,15 @@
   } else {
     console.log('Não muito grande.')
   }
-}")
+}
+
+eGrande(10000);
+")
 
  (:p "
 Testar sinal de um numero")
  
  (:pre :data-language "javascript"
        (:print (load-file-as-string "js/sinal.js")))
-
+ 
  ) ;; END section

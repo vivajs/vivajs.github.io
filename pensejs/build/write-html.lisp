@@ -56,7 +56,7 @@
     (pcl-with-gensyms
      (in)
      (with-open-file (in lisp-filename)
-       `(with-html-to-file (,html-filename)
+       `(with-html-to-file (,html-filename :pretty nil)
           (html
            (:html
             :lang "en"
@@ -96,10 +96,11 @@
 ;; https://www.rosettacode.org/wiki/Read_entire_file#Common_Lisp
 (defun load-file-as-string (path)
   (with-open-file (stream path)
-    (let ((data (make-string (file-length stream))))
-      (read-sequence data stream)
-      data)))
-
+    (do ((line (read-line stream nil) (read-line stream nil))
+         (result ""))
+        ((null line) result)
+      (setf result (concatenate 'string result line (string #\Newline))))))
+      
 ;; WRITE-INDEX
 (defmacro write-index ()
   ;; INDEX

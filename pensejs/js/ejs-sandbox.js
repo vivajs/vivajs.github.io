@@ -508,6 +508,8 @@ window.addEventListener("load", function() {
     return node;
   }
 
+  // EDIT: Prevent up/down arrows leaving editor
+  /*
   CodeMirror.commands[CodeMirror.keyMap.default.Down = "lineDownEscape"] = function(cm) {
     var cur = cm.getCursor();
     if (cur.line == cm.lastLine()) {
@@ -526,7 +528,8 @@ window.addEventListener("load", function() {
       cm.moveV(-1, "line");
     }
   };
-
+  */
+  
   var keyMap = {
     Esc: function(cm) { cm.display.input.blur(); },
     "Ctrl-Enter": function(cm) { runCode(cm.state.context); },

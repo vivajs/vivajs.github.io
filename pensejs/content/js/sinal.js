@@ -7,3 +7,4 @@ function sinal(x) {
     return "Zero";
   }
 }
+// end sinal.js
