@@ -1,1 +1,8 @@
 Possibly separate ejs-custom.js to multiple parts if they get too big
+
+"feature-check.js" for arrow functions and classes
+
+Since code in boxes are independent of each other, "preload"
+necessary functions as a separate file, just like how ejs-tartaruga
+loads canvas and turtle code
+
