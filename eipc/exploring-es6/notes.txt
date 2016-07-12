@@ -5,5 +5,42 @@ Avoid var
 String interpolation
 let s = `Hello ${name}`;
 
+Destructuring (section 4.5.1)
 
+for (const elem of arr) {
+  console.log(elem);
+}
 
+Parameter default values
+function f(x=0, y=100) {
+  ...
+}
+
+Spread operator instead of apply
+
+Previously:
+Math.max.apply(null, [-1, 5, 11, 3]);
+
+To:
+Math.max(...[-1, 5, 11, 3]);
+
+Classes:
+
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+  describe() {
+    return "Person called " + this.name;
+  }
+}
+
+class Employee extends Person {
+  constructor(name, title) {
+    super(name);
+    this.title = title;
+  }
+  describe() {
+    return super.describe() + " (" + this.title + ")";
+  }
+}

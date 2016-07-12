@@ -62,7 +62,7 @@
             :lang "en"
             (:head
              (:meta :charset "utf-8")
-             (:title ,(concatenate 'string html-title " - Pense JS"))
+             (:title ,(concatenate 'string html-title " - EIPC"))
              (:link :rel "stylesheet" :href "../css/ejs-sandbox.css"))
             (:body
              (:header
