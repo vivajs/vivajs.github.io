@@ -549,11 +549,12 @@ window.addEventListener("load", function() {
       editor.setCursor(editor.coordsChar({left: e.clientX, top: e.clientY}, "client"));
       editor.focus();
     }
+    // SWAP menu and out
+    var out = wrap.appendChild(elt("div", {"class": "sandbox-output"}));
+
     // EDIT Insert console before iframe
     // var out = wrap.insertBefore(elt("div", {"class": "sandbox-output"}), wrap.lastChild);
     var menu = wrap.appendChild(elt("div", {"class": "sandbox-menu", title: "Click to Run (Ctrl-Enter)"}));
-
-    var out = wrap.appendChild(elt("div", {"class": "sandbox-output"}));
 
     /* EDIT: ADD RESET ICON */
     var codeReset = wrap.appendChild(elt("div", {"class": "sandbox-reset", title: "Click to Reset code (Ctrl-Q)"}));
