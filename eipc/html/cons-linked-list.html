@@ -15,48 +15,55 @@
 
 <pre data-language='javascript'>
 
+function cons(data, lst) {
+  let head = new Node(data);
+  head.next = lst;
+  return head;
+}
+
+function Node(data) {
+  this.data = data;
+  
+  this.disp = () => {
+    let start = this;
+    while (start) {
+      console.log(start.data);
+      start = start.next;
+    }
+  }
+  
+  this.dispES5 = function() {
+    var start = this;
+    while (start) {
+      console.log(start.data);
+      start = start.next;
+    }
+  }
+}
+
+function car(lst) {
+  return lst.data;
+}
+
+function cdr(lst) {
+  return lst.next;
+}
+
+let lst = null;
+lst = cons(3, lst);
+lst = cons(4, lst);
+lst = cons(5, lst);
+lst.dispES5();
+
+console.log(car(lst));
+cdr(lst).disp();
+
 </pre>
 
 
 
-<pre data-language='javascript'>
-
-console.log("Hello");
-
-</pre>
-
-
-<pre data-language='javascript' id='experimental'>
-class Grandparent {
-  constructor(name) {
-    this.name = name;
-  }
-  doSomething(x) {
-    return "grandparent does " + x;
-  }
-}
-
-class Parent extends Grandparent {
-  constructor(name) {
-    super(name);
-  }
-}
-
-class MyClass extends Parent {
-  constructor(name) {
-    super(name);
-  }
-  doSomething(x) {
-    return super.doSomething(x) + " with grandparent";
-  }
-}
-
-</pre>
     
-<pre data-language='javascript' id='experimental2'>
 
-
-</pre>
 
     
     </section></article><footer><a class='imgNav' href='modularidade-objetos-e-estado.html'><img src='img/prev.png' alt='prev'></a><a class='imgNav' href='../index.html'><img src='img/home.png' alt='home'></a><a class='imgNav' href='fim.html'><img src='img/next.png' alt='next'></a></footer>
